@@ -1,4 +1,5 @@
 discord
+exceptions
 bs4
 docx
 requests
