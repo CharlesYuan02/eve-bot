@@ -27,12 +27,10 @@ pyrsistent==0.15.3
 python-dateutil==2.7.5
 pytz==2019.1
 PyYAML==3.13
-requests==2.22.0
 six==1.12.0
 spacy==2.1.4
 SQLAlchemy==1.2.19
 srsly==0.0.7
 thinc==7.0.8
 tqdm==4.32.2
-urllib3==1.25.3
 wasabi==0.2.2
