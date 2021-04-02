@@ -2,6 +2,7 @@ discord
 bs4
 python-docx
 requests
+requests_html
 urllib3
 wikipedia
 chatterbot
