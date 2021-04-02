@@ -1,7 +1,6 @@
 discord
-exceptions
 bs4
-docx
+python-docx
 requests
 urllib3
 wikipedia
