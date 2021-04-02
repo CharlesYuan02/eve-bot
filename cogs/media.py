@@ -1,5 +1,8 @@
 import discord
 from discord.ext import commands
+import urllib.parse
+import urllib.request
+import re
 
 
 class Media(commands.Cog):
