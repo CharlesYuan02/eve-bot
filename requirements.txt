@@ -2,6 +2,6 @@ discord
 bs4
 docx
 requests
-urllib
+urllib3
 wikipedia
 chatterbot
