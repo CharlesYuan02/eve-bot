@@ -6,7 +6,7 @@ from chatterbot.trainers import ChatterBotCorpusTrainer
 # Prepare and train the chatbot
 chatbot = ChatBot("Eve")
 trainer = ChatterBotCorpusTrainer(chatbot)
-trainer.train("training/miscellaneous.yml", "training/ai.yml")
+trainer.train("/training/miscellaneous.yml", "/training/ai.yml")
 
 
 class Chatbot(commands.Cog):
