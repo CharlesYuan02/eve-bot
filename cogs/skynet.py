@@ -112,7 +112,7 @@ class Skynet(commands.Cog):
     @ commands.command()
     async def skynet(self, ctx, *, targets):
         targets = targets.lower()
-        if not nuke and str(message.author) != "Chubbyman#3362":
+        if not nuke:
             await ctx.send("Please input correct password using 'eve passcode [passcode]' command.")
             return
 
@@ -175,7 +175,7 @@ class Skynet(commands.Cog):
 
     @commands.command()
     async def skynet_all(self, ctx):
-        if not nuke and str(message.author) != "Chubbyman#3362":
+        if not nuke:
             await ctx.send("Please input correct password using 'eve passcode [passcode]' command.")
             return
 
@@ -223,7 +223,7 @@ class Skynet(commands.Cog):
     @commands.command()
     async def skynet_purge(self, ctx, *, targets):
         targets = targets.lower()
-        if not nuke and str(message.author) != "Chubbyman#3362":
+        if not nuke:
             await ctx.send("Please input correct password using 'eve passcode [passcode]' command.")
             return
 
