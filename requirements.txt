@@ -14,7 +14,8 @@ pint>=0.8.1
 pymongo>=3.3,<4.0
 twine
 twython
-spacy>=2.1,<2.2
+spacy>=2.2.0,<3.0.0
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.0/en_core_web_sm-2.2.0.tar.gz#egg=en_core_web_sm
 sphinx>=3.0,<3.1
 sphinx_rtd_theme
 pyyaml>=5.3,<5.4
