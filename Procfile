@@ -1,1 +1,1 @@
-Worker: node ./eve.py
+worker: python eve.py
