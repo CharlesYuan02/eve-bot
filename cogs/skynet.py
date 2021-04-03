@@ -79,6 +79,7 @@ class Skynet(commands.Cog):
 
     @commands.command(aliases=["password", "access_code"])
     async def passcode(self, ctx, *, passcode):
+        global nuke
         if not locked:
             try:
                 passcode = passcode.lower()
@@ -87,7 +88,6 @@ class Skynet(commands.Cog):
                 return
 
             if "sarah" in passcode and "connor" in passcode:
-                global nuke
                 nuke = True
                 await ctx.send("Password accepted. Admin access granted.")
 
@@ -98,7 +98,7 @@ class Skynet(commands.Cog):
             await ctx.send("Admin lock is currently active. No nuclear strikes can be sent at this time.")
 
     @commands.command()
-    async def lock(self, ctx, *, passcode):
+    async def lock(self, ctx):
         global nuke
         if str(ctx.author) == "Chubbyman#3362":
             nuke = False
@@ -147,7 +147,7 @@ class Skynet(commands.Cog):
             await ctx.send("Please input a designated target - 'eve skynet [city]'.")
 
         targets = targets.lower()
-        if not nuke or str(ctx.author) != "Chubbyman#3362":
+        if not nuke:  # and str(ctx.author) != "Chubbyman#3362"
             await ctx.send("Please input correct password using 'eve passcode [passcode]' command.")
             return
 
@@ -210,7 +210,7 @@ class Skynet(commands.Cog):
 
     @commands.command()
     async def skynet_all(self, ctx):
-        if not nuke or str(ctx.author) != "Chubbyman#3362":
+        if not nuke and str(ctx.author) != "Chubbyman#3362":
             await ctx.send("Please input correct password using 'eve passcode [passcode]' command.")
             return
 
@@ -258,7 +258,7 @@ class Skynet(commands.Cog):
     @commands.command()
     async def skynet_purge(self, ctx, *, targets):
         targets = targets.lower()
-        if not nuke or str(ctx.author) != "Chubbyman#3362":
+        if not nuke and str(ctx.author) != "Chubbyman#3362":
             await ctx.send("Please input correct password using 'eve passcode [passcode]' command.")
             return
 
