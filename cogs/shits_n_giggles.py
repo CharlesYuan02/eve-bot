@@ -35,7 +35,7 @@ class Gifs(commands.Cog):
             await ctx.send(f"{member}, prepare to die!")
             await ctx.send(f"{random.choice(kill_library)}")
 
-    @commands.command()
+    @commands.command(aliases=["bully"])
     async def shit_on(self, ctx, member):
         people = ["'<@!280788601086672897>'", "'<@!277889218167177216>'"]
         # if repr(member) in people:
