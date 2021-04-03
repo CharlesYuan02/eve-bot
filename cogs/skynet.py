@@ -147,7 +147,7 @@ class Skynet(commands.Cog):
             await ctx.send("Please input a designated target - 'eve skynet [city]'.")
 
         targets = targets.lower()
-        if not nuke:  # and str(ctx.author) != "Chubbyman#3362"
+        if not nuke and str(ctx.author) != "Chubbyman#3362":
             await ctx.send("Please input correct password using 'eve passcode [passcode]' command.")
             return
 
