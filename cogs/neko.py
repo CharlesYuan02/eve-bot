@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+import random 
 
 
 # As suggested by Amaterasu#1541
