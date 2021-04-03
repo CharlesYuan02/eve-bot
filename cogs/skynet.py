@@ -1,4 +1,3 @@
-# https://www.worldatlas.com/citypops.htm
 import discord
 from discord.ext import commands
 import time
@@ -39,7 +38,9 @@ cities = [("Tokyo", 38001000), ("Delhi", 25703168), ("Shanghai", 23740778), ("Sa
                                                      4539393), ("Monterrey", 4512572), ("Sydney", 4505341),
           ("Dalian", 4489380), ("Xiamen", 4430081), ("Zhengzhou",
                                                      4387118), ("Boston", 4249036), ("Melbourne", 4203416),
-          ("Brasilia", 4155476), ("Jiddah", 4075803), ("Phoenix", 4062605), ("Ji'nan", 4032150), ("Montreal", 3980708)]
+          ("Brasilia", 4155476), ("Jiddah", 4075803), ("Phoenix",
+                                                       4062605), ("Ji'nan", 4032150), ("Montreal", 3980708),
+          ("Dubai", 3384000), ("Waterloo", 593882)]
 
 nuke_gifs = ["https://thumbs.gfycat.com/DelightfulOffensiveFattaileddunnart-size_restricted.gif",
              "https://i.pinimg.com/originals/5d/20/24/5d202482e3b485744bc2de8e9cd81cff.gif",
@@ -47,6 +48,8 @@ nuke_gifs = ["https://thumbs.gfycat.com/DelightfulOffensiveFattaileddunnart-size
              "https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/130/8685105bf19b837b9cb0ea8f2ef05adf_a..gif",
              "https://i.pinimg.com/originals/06/c3/92/06c392b847166a9a671bfcd590d8fff7.gif",
              "https://i.gifer.com/Hgp9.gif"]
+nuke = False
+locked = False
 
 
 def test_code():
@@ -69,29 +72,58 @@ def test_code():
     print(returned_string)
 
 
-nuke = False
-
-
 class Skynet(commands.Cog):
 
     def __init__(self, client):  # References whatever is passed through the client from discord
         self.client = client
 
-    @commands.command()
+    @commands.command(aliases=["password", "access_code"])
     async def passcode(self, ctx, *, passcode):
+        if not locked:
+            try:
+                passcode = passcode.lower()
+            except:
+                await ctx.send("Please input correct password with command.")
+                return
+
+            if "sarah" in passcode and "connor" in passcode:
+                global nuke
+                nuke = True
+                await ctx.send("Password accepted. Admin access granted.")
+
+            else:
+                await ctx.send("Incorrect passcode.")
+
+        else:
+            await ctx.send("Admin lock is currently active. No nuclear strikes can be sent at this time.")
+
+    @commands.command()
+    async def lock(self, ctx, *, passcode):
+        global nuke
+        if str(ctx.author) == "Chubbyman#3362":
+            nuke = False
+            await ctx.send("Nuclear strikes are now locked. Password must now be re-entered.")
+        else:
+            await ctx.send("Apologies, only my master can lock the nukes.")
+
+    @commands.command()
+    async def admin_lock(self, ctx, *, passcode):
+        global nuke
+        global locked
         try:
             passcode = passcode.lower()
         except:
-            await ctx.send("Please input correct password with command.")
+            await ctx.send("Please input correct admin passcode with command.")
             return
 
-        if "sarah" in passcode and "connor" in passcode:
-            global nuke
-            nuke = True
-            await ctx.send("Password accepted. Admin access granted.")
+        if "lucia" in passcode and "sukrova" in passcode and str(ctx.author) == "Chubbyman#3362" and not locked:
+            nuke = False
+            locked = True
+            await ctx.send("Skynet function is now locked.")
 
-        else:
-            await ctx.send("Incorrect passcode.")
+        elif "lucia" in passcode and "sukrova" in passcode and str(ctx.author) == "Chubbyman#3362" and locked:
+            locked = False
+            await ctx.send("Skynet function has been unlocked. You may now send nuclear strikes.")
 
     @commands.command()
     async def skynet_list(self, ctx):
@@ -109,10 +141,13 @@ class Skynet(commands.Cog):
         await ctx.send("List of Target Cities:")
         await ctx.send(returned_string)
 
-    @ commands.command()
-    async def skynet(self, ctx, *, targets):
+    @commands.command()
+    async def skynet(self, ctx, *, targets=None):
+        if targets == None:
+            await ctx.send("Please input a designated target - 'eve skynet [city]'.")
+
         targets = targets.lower()
-        if not nuke:
+        if not nuke or str(ctx.author) != "Chubbyman#3362":
             await ctx.send("Please input correct password using 'eve passcode [passcode]' command.")
             return
 
@@ -175,7 +210,7 @@ class Skynet(commands.Cog):
 
     @commands.command()
     async def skynet_all(self, ctx):
-        if not nuke:
+        if not nuke or str(ctx.author) != "Chubbyman#3362":
             await ctx.send("Please input correct password using 'eve passcode [passcode]' command.")
             return
 
@@ -223,7 +258,7 @@ class Skynet(commands.Cog):
     @commands.command()
     async def skynet_purge(self, ctx, *, targets):
         targets = targets.lower()
-        if not nuke:
+        if not nuke or str(ctx.author) != "Chubbyman#3362":
             await ctx.send("Please input correct password using 'eve passcode [passcode]' command.")
             return
 
