@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from PyDictionary import PyDictionary  # install PyDictionary
+from PyDictionary import PyDictionary  # install Pydictionary
 dictionary = PyDictionary()
 
 
@@ -11,6 +11,9 @@ class Dictionary(commands.Cog):
 
     @commands.command(aliases=["definition"])
     async def define(self, ctx, *, word):
+        if dictionary.meaning(word) == None:
+            await ctx.send(f"Apologies, I could not find the definition for {word}.")
+            return
         await ctx.send("One second...")
         nouns = []
         verbs = []
@@ -70,6 +73,9 @@ class Dictionary(commands.Cog):
 
     @commands.command()
     async def synonym(self, ctx, *, word):
+        if dictionary.synonym(word) == None:
+            await ctx.send(f"Apologies, I could not find any synonyms for {word}.")
+            return
         await ctx.send("One second...")
         synonyms = []
         for synonym in dictionary.synonym(word):
@@ -78,6 +84,9 @@ class Dictionary(commands.Cog):
 
     @commands.command(aliases=["opposite"])
     async def antonym(self, ctx, *, word):
+        if dictionary.antonym(word) == None:
+            await ctx.send(f"Apologies, I could not find any antonyms for {word}.")
+            return
         await ctx.send("One second...")
         antonyms = []
         for antonym in dictionary.antonym(word):
