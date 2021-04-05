@@ -18,6 +18,7 @@ class Media(commands.Cog):
         video_ids = re.findall(r"watch\?v=(\S{11})", html.read().decode())
         await ctx.send("https://www.youtube.com/watch?v=" + video_ids[0])
 
+    '''
     @commands.command(aliases=["photo", "picture", "show"])
     async def image(self, ctx, *, search):
         search = search.replace(" ", "_")
@@ -25,6 +26,7 @@ class Media(commands.Cog):
             f"https://www.google.com/search?q={search}&source=lnms&tbm=isch")
         data = {'content': 'images src', 'src': re.findall('src="([^"]+)"', a)}
         await ctx.send(data['src'][0])
+    '''
 
 
 def setup(client):
