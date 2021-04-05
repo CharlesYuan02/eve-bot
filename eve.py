@@ -2,7 +2,7 @@ import bs4
 from bs4 import BeautifulSoup
 import discord  # install discord, install -U discord.py (update!)
 from discord.ext import commands
-import docx  # install docx
+import docx  # install python-docx
 import json
 import os
 import random
@@ -12,7 +12,7 @@ from requests_html import HTMLSession
 import time
 import urllib.parse
 import urllib.request
-import wikipedia  # install wikipedia
+import wikipedia
 
 
 TOKEN = os.environ["TOKEN"]
