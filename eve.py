@@ -166,7 +166,15 @@ async def give_flowers(ctx, member):
     else:
         await ctx.send(f"{member}, here is a :rose:, courtesy of your beloved {ctx.author}.")
 
+        
+# Unleashes Hyperactive skill
+@ client.command(aliases=["odin_spear", "hyperactive_skill", "HYPERACTIVE"])
+async def hyperactive(ctx):
+    await ctx.send("https://media.giphy.com/media/fFmgzgndHLvfovfK9B/giphy.gif")
+    time.sleep(3)
+    await ctx.send("https://media.giphy.com/media/bk0pqOHhjfVGphL6Y1/giphy.gif")
 
+    
 if __name__ == "__main__":
     for filename in os.listdir("cogs"):
         if filename.endswith(".py"):
