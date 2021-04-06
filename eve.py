@@ -69,7 +69,7 @@ async def on_message(message):
     if message.content == "test":
         msg = "Test successful."
         await message.channel.send(msg)
-    if str(message.author) == "mak13789#4418" and mak:
+    if (str(message.author) == "mak13789#4418") and mak:
         await message.add_reaction("<:cringe:704351813570396202>")
     if (str(message.author) == "Euler's formula#0741" or str(message.author) == "mak13789#4418" or str(message.author) == "Amaterasu#1541") and roast:
         msg = random.choice(roast_John)
