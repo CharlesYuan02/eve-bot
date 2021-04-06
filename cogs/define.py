@@ -48,6 +48,13 @@ class Dictionary(commands.Cog):
             adjectives = []
             adverbs = []
 
+            if word.lower() == "praxis":
+                nouns.append(
+                    "the worst course in the Engineering Science program")
+            elif word.lower() == "calculus":
+                nouns.append(
+                    "the most rigorous course in the Engineering Science program")
+
             for key in dictionary.meaning(word):
                 if key == "Noun":
                     for definition in dictionary.meaning(word)[key]:
@@ -127,16 +134,20 @@ class Dictionary(commands.Cog):
                 definition = definition.get_text()
                 await ctx.send("```Definition: \n" + str(definition) + "```")
 
-    @commands.command()
+    @commands.command(aliases=["synonyms"])
     async def synonym(self, ctx, *, word):
         words = word.split()
         if len(words) == 1 and dictionary.synonym(words[0]) != None:
             word = words[0]
             await ctx.send("One second...")
             synonyms = []
+            if word.lower() == "praxis":
+                synonyms.append("trash course")
+            elif word.lower() == "calculus":
+                synonyms.append("rigorous course")
             for synonym in dictionary.synonym(word):
                 synonyms.append(synonym)
-            await ctx.send("```Synonyms: \n-" + "\n-".join(synonyms) + "```")
+            await ctx.send("```Synonyms: \n" + ", ".join(synonyms) + "```")
 
         # If it's more than one word
         else:
@@ -166,7 +177,7 @@ class Dictionary(commands.Cog):
                 synonyms = synonyms.get_text()
                 await ctx.send("```Synonyms: \n" + str(synonyms) + "```")
 
-    @commands.command(aliases=["opposite"])
+    @commands.command(aliases=["opposite", "antonyms"])
     async def antonym(self, ctx, *, word):
         if dictionary.antonym(word) == None:
             await ctx.send(f"Apologies, I could not find any antonyms for {word}.")
