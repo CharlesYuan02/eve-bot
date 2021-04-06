@@ -53,8 +53,8 @@ async def on_member_remove(member):
 @client.event
 async def on_message(message):
     global roast
-    message.content = message.content.lower()
-    message_content = message.content.split()
+    message_content = message.content.lower()
+    message_content = message_content.split()
     greetings_library = ["hello", "hey", "yo", "hi", "greetings"]
     sample_greetings = ["Hello there!", "Heyo!", "'Sup dude",
                         "What's cookin', good lookin'?", "Yo", "Hieeee!"]
