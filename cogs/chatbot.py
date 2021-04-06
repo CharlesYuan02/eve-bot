@@ -22,6 +22,7 @@ class Chatbot(commands.Cog):
             await ctx.send(response)
         else:
             await ctx.send("I'm sorry, I don't understand the question.")
+            await ctx.send("If you wanna help me learn more about this world, please fill out this form with what you asked: \nhttps://forms.gle/rcXWqXCqGM4oEKD69")
 
 
 def setup(client):
