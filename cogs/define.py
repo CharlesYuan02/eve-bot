@@ -163,7 +163,7 @@ class Dictionary(commands.Cog):
 
             else:
                 synonyms = get_synonyms(words)[0]
-                synonym = synonym.get_text()
+                synonyms = synonyms.get_text()
                 await ctx.send("```Synonyms: \n" + str(synonyms) + "```")
 
     @commands.command(aliases=["opposite"])
