@@ -199,6 +199,11 @@ async def mak_toggle(ctx):
         mak = False
         await ctx.send("Deactivating mak bullying mode.")
         
+        
+@ client.command(aliases=["howeeb"])
+async def howweeb(ctx):
+    await ctx.send(f"According to my calculations, you are {round(random.random() * 100, 1)}% weeb.")
+    
 
 if __name__ == "__main__":
     for filename in os.listdir("cogs"):
