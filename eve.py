@@ -71,6 +71,7 @@ async def on_message(message):
         await message.channel.send(msg)
     if (str(message.author) == "mak13789#4418") and mak:
         await message.add_reaction("<:cringe:704351813570396202>")
+        await message.add_reaction("<:thonk:704038381281345596>")
     if (str(message.author) == "Euler's formula#0741" or str(message.author) == "mak13789#4418" or str(message.author) == "Amaterasu#1541") and roast:
         msg = random.choice(roast_John)
         await message.channel.send(msg)
@@ -179,11 +180,16 @@ async def hyperactive(ctx):
 
 
 @ client.command()
-async def mak(ctx):
-    await ctx.send("<:cringe:704351813570396202>")
+async def rana(ctx):
+    await ctx.send("<:ranaway_with_me:808178642093211648>")
 
 
 @ client.command()
+async def mak(ctx):
+    await ctx.send("<:thonk:704038381281345596> <:cringe:704351813570396202>")
+
+
+@ client.command(aliases=["toggle_mak"])
 async def mak_toggle(ctx):
     global mak
     if (str(ctx.author) == "Chubbyman#3362" or str(ctx.author) == "Lizard#5779") and not mak:
@@ -192,7 +198,7 @@ async def mak_toggle(ctx):
     elif (str(ctx.author) == "Chubbyman#3362" or str(ctx.author) == "Lizard#5779") and mak:
         mak = False
         await ctx.send("Deactivating mak bullying mode.")
-
+        
 
 if __name__ == "__main__":
     for filename in os.listdir("cogs"):
