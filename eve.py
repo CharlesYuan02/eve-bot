@@ -157,7 +157,7 @@ async def apm(ctx, member: discord.Member = None, *, message):
         await ctx.send("Please use @mention to message someone")
 
 
-@ client.command()
+@ client.command(aliases=["delete", "del", "remove"])
 async def clear(ctx, amount=10):  # Clears a specified number of lines
     await ctx.channel.purge(limit=amount)
 
