@@ -1,8 +1,8 @@
 import bs4
 from bs4 import BeautifulSoup
-import discord  # install discord, install -U discord.py (update!)
+import discord
 from discord.ext import commands
-import docx  # install python-docx
+import docx
 import json
 import os
 import random
@@ -18,7 +18,7 @@ import wikipedia
 TOKEN = os.environ["TOKEN"]
 client = commands.Bot(command_prefix="eve ")  # Prefix can be anything
 roast = False
-mak = False
+bully_mak = False
 
 
 @client.command()
@@ -69,9 +69,9 @@ async def on_message(message):
     if message.content == "test":
         msg = "Test successful."
         await message.channel.send(msg)
-    if (str(message.author) == "mak13789#4418") and mak:
-        await message.add_reaction("<:cringe:704351813570396202>")
+    if str(message.author) == "mak13789#4418" and bully_mak:
         await message.add_reaction("<:thonk:704038381281345596>")
+        await message.add_reaction("<:cringe:704351813570396202>")
     if (str(message.author) == "Euler's formula#0741" or str(message.author) == "mak13789#4418" or str(message.author) == "Amaterasu#1541") and roast:
         msg = random.choice(roast_John)
         await message.channel.send(msg)
@@ -191,19 +191,21 @@ async def mak(ctx):
 
 @ client.command(aliases=["toggle_mak"])
 async def mak_toggle(ctx):
-    global mak
-    if (str(ctx.author) == "Chubbyman#3362" or str(ctx.author) == "Lizard#5779") and not mak:
-        mak = True
+    global bully_mak
+    if (str(ctx.author) == "Chubbyman#3362" or str(ctx.author) == "Lizard#5779") and not bully_mak:
+        bully_mak = True
         await ctx.send("Initiating mak bullying mode.")
-    elif (str(ctx.author) == "Chubbyman#3362" or str(ctx.author) == "Lizard#5779") and mak:
-        mak = False
+    elif (str(ctx.author) == "Chubbyman#3362" or str(ctx.author) == "Lizard#5779") and bully_mak:
+        bully_mak = False
         await ctx.send("Deactivating mak bullying mode.")
-        
-        
+    else:
+        await ctx.send("Apologies, you do not have access to this command.")
+
+
 @ client.command(aliases=["howeeb"])
 async def howweeb(ctx):
     await ctx.send(f"According to my calculations, you are {round(random.random() * 100, 1)}% weeb.")
-    
+
 
 if __name__ == "__main__":
     for filename in os.listdir("cogs"):
