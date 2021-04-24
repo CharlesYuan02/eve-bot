@@ -175,6 +175,7 @@ class Skynet(commands.Cog):
                     returned_string += "\n"
                 returned_string += "```"
                 if returned_string == "``````":
+                    launching = False
                     await ctx.send("Target refused. Please input a city with over 4 million residents.\nType 'eve list_cities' for reference list.")
                     return
 
@@ -300,6 +301,7 @@ class Skynet(commands.Cog):
                     returned_string += "\n"
                 returned_string += "```"
                 if returned_string == "``````":
+                    launching = False
                     await ctx.send("Target refused. Please input a city with over 4 million residents.\nType 'eve list_cities' for reference list.")
                     return
 
