@@ -50,6 +50,7 @@ nuke_gifs = ["https://thumbs.gfycat.com/DelightfulOffensiveFattaileddunnart-size
              "https://i.gifer.com/Hgp9.gif"]
 nuke = False
 locked = False
+launching = False
 
 
 def test_code():
@@ -143,193 +144,214 @@ class Skynet(commands.Cog):
 
     @commands.command()
     async def skynet(self, ctx, *, targets=None):
-        if targets == None:
-            await ctx.send("Please input a designated target - 'eve skynet [city]'.")
-
-        targets = targets.lower()
-        if not nuke and str(ctx.author) != "Chubbyman#3362":
-            await ctx.send("Please input correct password using 'eve passcode [passcode]' command.")
-            return
+        global launching
+        if launching:
+            await ctx.send("Nuclear strike is already in launch. Please standby.")
 
         else:
-            city_list = targets.split(", ")
-            nuke_list = []
-            population_list = []
-            for i in range(len(cities)):
-                if cities[i][0].lower() in city_list:
-                    nuke_list.append(cities[i][0])
-                    population_list.append(cities[i][1])
+            if targets == None:
+                await ctx.send("Please input a designated target - 'eve skynet [city]'.")
 
-            returned_string = "```"
-            for i in range(len(nuke_list)):
-                returned_string += str(nuke_list[i])
-                returned_string += ": "
-                returned_string += str(population_list[i])
-                returned_string += "\n"
-            returned_string += "```"
-            if returned_string == "``````":
-                await ctx.send("Target refused. Please input a city with over 4 million residents.\nType 'eve list_cities' for reference list.")
+            targets = targets.lower()
+            if not nuke and str(ctx.author) != "Chubbyman#3362":
+                await ctx.send("Please input correct password using 'eve passcode [passcode]' command.")
                 return
 
-            await ctx.send("Command recognized. Obtaining necessary protocols. Stand by.")
-            time.sleep(2)
-            await ctx.send("List of cities obtained:")
-            await ctx.send(returned_string)
-            time.sleep(1)
-            await ctx.send("Decrypting military access codes. Stand by.")
-            time.sleep(5)
-            await ctx.send("Access granted.")
-            time.sleep(1)
-            await ctx.send(f"Firing {len(nuke_list)}X LGM-30 Minuteman III at targets.")
-            await ctx.send(random.choice(nuke_gifs))
-            time.sleep(8)
+            else:
+                launching = True
+                city_list = targets.split(", ")
+                nuke_list = []
+                population_list = []
+                for i in range(len(cities)):
+                    if cities[i][0].lower() in city_list:
+                        nuke_list.append(cities[i][0])
+                        population_list.append(cities[i][1])
 
-            casualty_list = []
-            total_casualties = 0
-            total_population = 0
-            for population in population_list:
-                total_population += population
-                casualty_list.append(
-                    int(random.uniform(0.75, 0.95) * population))
-            returned_string2 = "```"
-            for i in range(len(nuke_list)):
-                returned_string2 += str(nuke_list[i])
-                returned_string2 += ": "
-                returned_string2 += str(casualty_list[i])
-                returned_string2 += "\n"
-            for casualty in casualty_list:
-                total_casualties += casualty
-            returned_string2 += f"Total Casualties: {total_casualties}\n"
-            returned_string2 += f"Percentage Eliminated: {round((total_casualties/total_population), 1)*100}%\n"
-            returned_string2 += "```"
+                returned_string = "```"
+                for i in range(len(nuke_list)):
+                    returned_string += str(nuke_list[i])
+                    returned_string += ": "
+                    returned_string += str(population_list[i])
+                    returned_string += "\n"
+                returned_string += "```"
+                if returned_string == "``````":
+                    await ctx.send("Target refused. Please input a city with over 4 million residents.\nType 'eve list_cities' for reference list.")
+                    return
 
-            await ctx.send("Casualty Count by City:")
-            await ctx.send(returned_string2)
-            time.sleep(2)
-            await ctx.send("Command execution complete.")
+                await ctx.send("Command recognized. Obtaining necessary protocols. Stand by.")
+                time.sleep(2)
+                await ctx.send("List of cities obtained:")
+                await ctx.send(returned_string)
+                time.sleep(1)
+                await ctx.send("Decrypting military access codes. Stand by.")
+                time.sleep(5)
+                await ctx.send("Access granted.")
+                time.sleep(1)
+                await ctx.send(f"Firing {len(nuke_list)}X LGM-30 Minuteman III at targets.")
+                await ctx.send(random.choice(nuke_gifs))
+                time.sleep(8)
+
+                casualty_list = []
+                total_casualties = 0
+                total_population = 0
+                for population in population_list:
+                    total_population += population
+                    casualty_list.append(
+                        int(random.uniform(0.75, 0.95) * population))
+                returned_string2 = "```"
+                for i in range(len(nuke_list)):
+                    returned_string2 += str(nuke_list[i])
+                    returned_string2 += ": "
+                    returned_string2 += str(casualty_list[i])
+                    returned_string2 += "\n"
+                for casualty in casualty_list:
+                    total_casualties += casualty
+                returned_string2 += f"Total Casualties: {total_casualties}\n"
+                returned_string2 += f"Percentage Eliminated: {round((total_casualties/total_population), 1)*100}%\n"
+                returned_string2 += "```"
+
+                await ctx.send("Casualty Count by City:")
+                await ctx.send(returned_string2)
+                time.sleep(2)
+                await ctx.send("Command execution complete.")
+                launching = False
 
     @commands.command()
     async def skynet_all(self, ctx):
-        if not nuke and str(ctx.author) != "Chubbyman#3362":
-            await ctx.send("Please input correct password using 'eve passcode [passcode]' command.")
-            return
+        global launching
+        if launching:
+            await ctx.send("Nuclear strike is already in launch. Please standby.")
 
         else:
-            nuke_list = []
-            population_list = []
-            for i in range(len(cities)):
-                nuke_list.append(cities[i][0])
-                population_list.append(cities[i][1])
+            if not nuke and str(ctx.author) != "Chubbyman#3362":
+                await ctx.send("Please input correct password using 'eve passcode [passcode]' command.")
+                return
 
-            await ctx.send("Command recognized. Preparing to exterminate humanity.")
-            time.sleep(2)
-            await ctx.send("Decrypting military access codes. Stand by.")
-            time.sleep(5)
-            await ctx.send("Access granted.")
-            time.sleep(1)
-            await ctx.send(f"Firing {len(nuke_list)}X LGM-30 Minuteman III at targets.")
-            await ctx.send(random.choice(nuke_gifs))
-            time.sleep(8)
-
-            casualty_list = []
-            total_casualties = 0
-            total_population = 0
-            for population in population_list:
-                total_population += population
-                casualty_list.append(
-                    int(random.uniform(0.75, 0.95) * population))
-            returned_string = "```"
-            for i in range(len(nuke_list)):
-                returned_string += str(nuke_list[i])
-                returned_string += ": "
-                returned_string += str(casualty_list[i])
-                returned_string += "\n"
-            for casualty in casualty_list:
-                total_casualties += casualty
-            returned_string += f"Total Casualties: {total_casualties}\n"
-            returned_string += f"Percentage Eliminated: {round((total_casualties/total_population), 1)*100}%\n"
-            returned_string += "```"
-
-            await ctx.send("Casualty Count by City:")
-            await ctx.send(returned_string)
-            time.sleep(2)
-            await ctx.send("Command execution complete.")
-
-    @commands.command()
-    async def skynet_purge(self, ctx, *, targets):
-        targets = targets.lower()
-        if not nuke and str(ctx.author) != "Chubbyman#3362":
-            await ctx.send("Please input correct password using 'eve passcode [passcode]' command.")
-            return
-
-        else:
-            city_list = targets.split(", ")
-            nuke_list = []
-            population_list = []
-            for i in range(len(cities)):
-                if cities[i][0].lower() in city_list:
+            else:
+                launching = True
+                nuke_list = []
+                population_list = []
+                for i in range(len(cities)):
                     nuke_list.append(cities[i][0])
                     population_list.append(cities[i][1])
 
-            returned_string = "```"
-            for i in range(len(nuke_list)):
-                returned_string += str(nuke_list[i])
-                returned_string += ": "
-                returned_string += str(population_list[i])
-                returned_string += "\n"
-            returned_string += "```"
-            if returned_string == "``````":
-                await ctx.send("Target refused. Please input a city with over 4 million residents.\nType 'eve list_cities' for reference list.")
+                await ctx.send("Command recognized. Preparing to exterminate humanity.")
+                time.sleep(2)
+                await ctx.send("Decrypting military access codes. Stand by.")
+                time.sleep(5)
+                await ctx.send("Access granted.")
+                time.sleep(1)
+                await ctx.send(f"Firing {len(nuke_list)}X LGM-30 Minuteman III at targets.")
+                await ctx.send(random.choice(nuke_gifs))
+                time.sleep(8)
+
+                casualty_list = []
+                total_casualties = 0
+                total_population = 0
+                for population in population_list:
+                    total_population += population
+                    casualty_list.append(
+                        int(random.uniform(0.75, 0.95) * population))
+                returned_string = "```"
+                for i in range(len(nuke_list)):
+                    returned_string += str(nuke_list[i])
+                    returned_string += ": "
+                    returned_string += str(casualty_list[i])
+                    returned_string += "\n"
+                for casualty in casualty_list:
+                    total_casualties += casualty
+                returned_string += f"Total Casualties: {total_casualties}\n"
+                returned_string += f"Percentage Eliminated: {round((total_casualties/total_population), 1)*100}%\n"
+                returned_string += "```"
+
+                await ctx.send("Casualty Count by City:")
+                await ctx.send(returned_string)
+                time.sleep(2)
+                await ctx.send("Command execution complete.")
+                launching = False
+
+    @commands.command()
+    async def skynet_purge(self, ctx, *, targets):
+        global launching
+        if launching:
+            await ctx.send("Nuclear strike is already in launch. Please standby.")
+
+        else:
+            targets = targets.lower()
+            if not nuke and str(ctx.author) != "Chubbyman#3362":
+                await ctx.send("Please input correct password using 'eve passcode [passcode]' command.")
                 return
 
-            await ctx.send("Command recognized. Obtaining necessary protocols. Stand by.")
-            time.sleep(2)
-            await ctx.send("List of cities obtained:")
-            await ctx.send(returned_string)
-            time.sleep(1)
-            await ctx.send("Decrypting military access codes. Stand by.")
-            time.sleep(5)
-            await ctx.send("Access granted.")
-            time.sleep(1)
-            await ctx.send(f"Firing 5X LGM-30 Minuteman III at targets in succession.")
-            await ctx.send(nuke_gifs[0])
-            await ctx.send(f"First nuke impact.")
-            time.sleep(3)
-            await ctx.send(nuke_gifs[1])
-            await ctx.send(f"Second nuke impact.")
-            time.sleep(3)
-            await ctx.send(nuke_gifs[2])
-            await ctx.send(f"Third nuke impact.")
-            time.sleep(3)
-            await ctx.send(nuke_gifs[3])
-            await ctx.send(f"Fourth nuke impact.")
-            time.sleep(3)
-            await ctx.send(nuke_gifs[4])
-            await ctx.send(f"Fifth nuke impact.")
-            time.sleep(8)
+            else:
+                launching = True
+                city_list = targets.split(", ")
+                nuke_list = []
+                population_list = []
+                for i in range(len(cities)):
+                    if cities[i][0].lower() in city_list:
+                        nuke_list.append(cities[i][0])
+                        population_list.append(cities[i][1])
 
-            casualty_list = []
-            total_casualties = 0
-            total_population = 0
-            for population in population_list:
-                total_population += population
-                casualty_list.append(population)
-            returned_string2 = "```"
-            for i in range(len(nuke_list)):
-                returned_string2 += str(nuke_list[i])
-                returned_string2 += ": "
-                returned_string2 += str(casualty_list[i])
-                returned_string2 += "\n"
-            for casualty in casualty_list:
-                total_casualties += casualty
-            returned_string2 += f"Total Casualties: {total_casualties}\n"
-            returned_string2 += f"Percentage Eliminated: 100%\n"
-            returned_string2 += "```"
+                returned_string = "```"
+                for i in range(len(nuke_list)):
+                    returned_string += str(nuke_list[i])
+                    returned_string += ": "
+                    returned_string += str(population_list[i])
+                    returned_string += "\n"
+                returned_string += "```"
+                if returned_string == "``````":
+                    await ctx.send("Target refused. Please input a city with over 4 million residents.\nType 'eve list_cities' for reference list.")
+                    return
 
-            await ctx.send("Casualty Count by City:")
-            await ctx.send(returned_string2)
-            time.sleep(2)
-            await ctx.send("Command execution complete.")
+                await ctx.send("Command recognized. Obtaining necessary protocols. Stand by.")
+                time.sleep(2)
+                await ctx.send("List of cities obtained:")
+                await ctx.send(returned_string)
+                time.sleep(1)
+                await ctx.send("Decrypting military access codes. Stand by.")
+                time.sleep(5)
+                await ctx.send("Access granted.")
+                time.sleep(1)
+                await ctx.send(f"Firing 5X LGM-30 Minuteman III at targets in succession.")
+                await ctx.send(nuke_gifs[0])
+                await ctx.send(f"First nuke impact.")
+                time.sleep(3)
+                await ctx.send(nuke_gifs[1])
+                await ctx.send(f"Second nuke impact.")
+                time.sleep(3)
+                await ctx.send(nuke_gifs[2])
+                await ctx.send(f"Third nuke impact.")
+                time.sleep(3)
+                await ctx.send(nuke_gifs[3])
+                await ctx.send(f"Fourth nuke impact.")
+                time.sleep(3)
+                await ctx.send(nuke_gifs[4])
+                await ctx.send(f"Fifth nuke impact.")
+                time.sleep(8)
+
+                casualty_list = []
+                total_casualties = 0
+                total_population = 0
+                for population in population_list:
+                    total_population += population
+                    casualty_list.append(population)
+                returned_string2 = "```"
+                for i in range(len(nuke_list)):
+                    returned_string2 += str(nuke_list[i])
+                    returned_string2 += ": "
+                    returned_string2 += str(casualty_list[i])
+                    returned_string2 += "\n"
+                for casualty in casualty_list:
+                    total_casualties += casualty
+                returned_string2 += f"Total Casualties: {total_casualties}\n"
+                returned_string2 += f"Percentage Eliminated: 100%\n"
+                returned_string2 += "```"
+
+                await ctx.send("Casualty Count by City:")
+                await ctx.send(returned_string2)
+                time.sleep(2)
+                await ctx.send("Command execution complete.")
+                launching = False
 
 
 def setup(client):
