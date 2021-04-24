@@ -16,9 +16,31 @@ import wikipedia
 
 
 TOKEN = os.environ["TOKEN"]
-client = commands.Bot(command_prefix="eve ")  # Prefix can be anything
+# Prefix can be anything
+client = commands.Bot(command_prefix="eve ", help_command=None)
 roast = False
-bully_mak = False
+bully_mak = False  # Apparently using mak as a variable name messes shit up... thanks mak
+
+
+@client.command()
+async def help(ctx):
+    await ctx.send("To see a full list of my commands and how to use them, please refer to my personal webpage.")
+    await ctx.send("https://charles-yuan.netlify.app/eve.html")
+    await ctx.send("```General/Admin Commands: \n\thelp - Displays this message \n\tclear - Clears a specified number of preceding lines \
+        \n\tkick - Kicks a specified user \n\tban - Bans a specified user \n\tunban - Unbans a specified user \n\tload - Loads a specified cog \
+        \n\tunload - Unloads a specified cog \n\tpoke - Sends a dm to a specified user with your user signature \
+        \n\tgive_flowers - Sends flowers to a specified user \n\tpm - Sends a private message to a specified user \
+        \n\tapm - Sends an anonymous private message to a specified user \n\thyperactive - Unleashes Eve's hyperactive skill: Odin Spear \
+        \nCog Commands: \n\tq - Ask Eve a question; chatbot feature \n\t8ball - Ask Eve a random yes/no question, and she will reply from a list of responses \
+        \n\tyoutube - Eve will return the first video she finds on Youtube given a query \n\tneko - Returns a picture of a neko \
+        \n\twiki - Returns the first 3 sentences of the Wikipedia entry given a query \n\thug - Sends a gif of a hug to a specified user \
+        \n\tkill - Sends a gruesome gif of a death to a specified user \n\tshit_on - Eve will insult the specified user \
+        \n\tdefine - Returns the definition(s) of a word if found \n\tsynonym - Returns the synonym(s) of a word if found \
+        \n\tantonym - Returns the antonym(s) of a word if found \
+        \nSkynet Commands: \n\tpasscode - 'Sarah Connor' \n\tlock - Forces the passcode to be re-entered. Can only be used by my master \
+        \n\tadmin_lock - Completely locks down Skynet commands. Can only be unlocked by my master \n\tskynet_list - Displays a list of Skynet commands \
+        \n\tlist_cities - Returns a list of all the cities available for nuking \n\tskynet - Nukes a specified city(s) from the list \
+        \n\tskynet_all - Nukes all the cities on the list \n\tskynet_purge - Continuously nukes all the cities on the list until there are no survivors```")
 
 
 @client.command()
