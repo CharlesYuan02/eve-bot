@@ -37,10 +37,14 @@ async def fuck_praxis(ctx):
         praxis = True
         praxis_time = datetime.datetime.now(EST).strftime("%H:%M:%S")
         await channel.send(f"Praxis bullying has commenced at {praxis_time} EST.")
-    elif praxis:
+    elif praxis and str(ctx.author) == "Chubbyman#3362": # Can only be stopped by me
         praxis = False
         praxis_time = datetime.datetime.now(EST).strftime("%H:%M:%S")
         await channel.send(f"Praxis bullying has been stopped at {praxis_time} EST.")
+    else:
+        # If command is called while active, it will let the user know
+        await channel.send("Praxis bullying is currently in progress.")
+        return
 
     while praxis:
         await channel.send("Fuck Praxis.")
