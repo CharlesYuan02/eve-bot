@@ -6,6 +6,7 @@ from discord.ext import commands
 import docx
 import json
 import os
+import pytz
 import random
 import re
 import requests
@@ -30,15 +31,16 @@ praxis_time = None
 async def fuck_praxis(ctx):
     global praxis
     channel = client.get_channel(793976446472159272)
+    EST = pytz.timezone("US/Eastern")
 
     if not praxis:
         praxis = True
-        praxis_time = datetime.datetime.now().strftime("%H:%M:%S")
-        await channel.send(f"Praxis bullying has commenced at {praxis_time}")
+        praxis_time = datetime.datetime.now(EST).strftime("%H:%M:%S")
+        await channel.send(f"Praxis bullying has commenced at {praxis_time} EST.")
     elif praxis:
         praxis = False
-        praxis_time = datetime.datetime.now().strftime("%H:%M:%S")
-        await channel.send(f"Praxis bullying has been stopped at {praxis_time}")
+        praxis_time = datetime.datetime.now(EST).strftime("%H:%M:%S")
+        await channel.send(f"Praxis bullying has been stopped at {praxis_time} EST.")
 
     while praxis:
         await channel.send("Fuck Praxis.")
