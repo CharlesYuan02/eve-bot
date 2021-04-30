@@ -1,5 +1,6 @@
 import bs4
 from bs4 import BeautifulSoup
+import datetime
 import discord
 from discord.ext import commands
 import docx
@@ -20,6 +21,28 @@ TOKEN = os.environ["TOKEN"]
 client = commands.Bot(command_prefix="eve ", help_command=None)
 roast = False
 bully_mak = False  # Apparently using mak as a variable name messes shit up... thanks mak
+praxis = False
+praxis_time = None
+
+
+# Every hour, it will send the message "Fuck Praxis" in the Praxis channel
+@client.command()
+async def fuck_praxis(ctx):
+    global praxis
+    channel = client.get_channel(793976446472159272)
+
+    if not praxis:
+        praxis = True
+        praxis_time = datetime.datetime.now().strftime("%H:%M:%S")
+        await channel.send(f"Praxis bullying has commenced at {praxis_time}")
+    elif praxis:
+        praxis = False
+        praxis_time = datetime.datetime.now().strftime("%H:%M:%S")
+        await channel.send(f"Praxis bullying has been stopped at {praxis_time}")
+
+    while praxis:
+        await channel.send("Fuck Praxis.")
+        await asyncio.sleep(3600)
 
 
 @client.command()
