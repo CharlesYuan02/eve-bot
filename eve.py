@@ -48,7 +48,7 @@ async def fuck_praxis(ctx):
 
     while praxis:
         await channel.send("Fuck Praxis.")
-        await asyncio.sleep(3600)
+        time.sleep(3600)
 
 
 @client.command()
