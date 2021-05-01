@@ -1,3 +1,4 @@
+import asyncio
 import bs4
 from bs4 import BeautifulSoup
 import datetime
@@ -48,7 +49,8 @@ async def fuck_praxis(ctx):
 
     while praxis:
         await channel.send("Fuck Praxis.")
-        time.sleep(3600)
+        # Asyncio is useful because it allows other tasks to be run while .sleep() is active
+        await asyncio.sleep(3600)
 
 
 @client.command()
