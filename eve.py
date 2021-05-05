@@ -25,6 +25,7 @@ roast = False
 bully_mak = False  # Apparently using mak as a variable name messes shit up... thanks mak
 praxis = False
 praxis_time = None
+praxis_lock = True
 
 
 # Every hour, it will send the message "Fuck Praxis" in the Praxis channel
@@ -56,7 +57,7 @@ async def fuck_praxis(ctx):
         return
 
 
-@client.command()
+@client.command(aliases=["praxis_lock"])
 async def lock_praxis(ctx):
     global praxis_lock
     if str(ctx.author) == "Chubbyman#3362" and praxis_lock:
