@@ -34,23 +34,41 @@ async def fuck_praxis(ctx):
     channel = client.get_channel(793976446472159272)
     EST = pytz.timezone("US/Eastern")
 
-    if not praxis:
-        praxis = True
-        praxis_time = datetime.datetime.now(EST).strftime("%H:%M:%S")
-        await channel.send(f"Praxis bullying has commenced at {praxis_time} EST.")
-    elif praxis and str(ctx.author) == "Chubbyman#3362": # Can only be stopped by me
-        praxis = False
-        praxis_time = datetime.datetime.now(EST).strftime("%H:%M:%S")
-        await channel.send(f"Praxis bullying has been stopped at {praxis_time} EST.")
+    if not praxis_lock:
+        if not praxis:
+            praxis = True
+            praxis_time = datetime.datetime.now(EST).strftime("%H:%M:%S")
+            await channel.send(f"Praxis bullying has commenced at {praxis_time} EST.")
+        elif praxis and str(ctx.author) == "Chubbyman#3362":
+            praxis = False
+            praxis_time = datetime.datetime.now(EST).strftime("%H:%M:%S")
+            await channel.send(f"Praxis bullying has been stopped at {praxis_time} EST.")
+        else:
+            await channel.send("Praxis bullying is currently in progress.")
+            return
+
+        while praxis:
+            await channel.send("Fuck Praxis.")
+            # Asyncio is useful because it allows other tasks to be run while .sleep() is active
+            await asyncio.sleep(3600)
     else:
-        # If command is called while active, it will let the user know
-        await channel.send("Praxis bullying is currently in progress.")
+        await channel.send("Apologies, Praxis bullying is locked.")
         return
 
-    while praxis:
-        await channel.send("Fuck Praxis.")
-        # Asyncio is useful because it allows other tasks to be run while .sleep() is active
-        await asyncio.sleep(3600)
+
+@client.command()
+async def lock_praxis(ctx):
+    global praxis_lock
+    if str(ctx.author) == "Chubbyman#3362" and praxis_lock:
+        praxis_lock = False
+        await ctx.send("Praxis bullying is now unlocked.")
+        return
+    elif str(ctx.author) == "Chubbyman#3362" and not praxis_lock:
+        praxis_lock = True
+        await ctx.send("Praxis bullying is now locked.")
+        return
+    else:
+        await ctx.send("Apologies, you cannot use this command.")
 
 
 @client.command()
