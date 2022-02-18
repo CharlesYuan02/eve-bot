@@ -26,4 +26,4 @@ class Chatbot(commands.Cog):
 
 
 def setup(client):
-    client.add_cog(Chatbot(client))
+    # client.add_cog(Chatbot(client))
