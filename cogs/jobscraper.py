@@ -61,7 +61,6 @@ class JobScraper(commands.Cog):
 
         key_terms = query.split(",")
         key_terms = [term.strip() for term in key_terms]
-        print(key_terms)
         num_jobs = int(key_terms[2]) if key_terms[2] else 15
         
         ret = get_jobs(key_terms[0], key_terms[1])
