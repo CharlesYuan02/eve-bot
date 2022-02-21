@@ -9,27 +9,28 @@ class AssignRoles(commands.Cog):
         self.client = client
 
     @commands.Cog.listener()
-    async def on_reaction_add(self, reaction, user):
+    async def on_raw_reaction_add(self, payload):
+        reaction = payload.emoji
+        channel = await self.client.fetch_channel(payload.channel_id)
+        guild = await self.client.fetch_guild(payload.guild_id)
+        user = await guild.fetch_member(payload.user_id)
         announcements_channel = self.client.get_channel(944266932956315708)
         testing_channel = self.client.get_channel(944272641878028299)
 
-        if reaction.message.channel != announcements_channel and reaction.message.channel != testing_channel:
-            return
-        if str(user) == "Eve#5834":  # Don't give Eve the roles
+        if channel != announcements_channel and channel != testing_channel:
             return
 
-        if str(reaction.emoji) == "<:Lacia:944271608711872583>":
-            mi_role = discord.utils.get(user.guild.roles, name="MI Major")
+        if str(reaction) == "<:Lacia:944271608711872583>":
+            mi_role = discord.utils.get(guild.roles, name="MI Major")
             await user.add_roles(mi_role)
-        elif str(reaction.emoji) == "<:Vivy:944271916426985532>":
-            ai_role = discord.utils.get(user.guild.roles, name="AI Minor")
+        elif str(reaction) == "<:Vivy:944271916426985532>":
+            ai_role = discord.utils.get(guild.roles, name="AI Minor")
             await user.add_roles(ai_role)
-        elif str(reaction.emoji) == "<:Miku:944272417180774420>":
-            guest_role = discord.utils.get(user.guild.roles, name="Guest")
+        elif str(reaction) == "<:Miku:944272417180774420>":
+            guest_role = discord.utils.get(guild.roles, name="Guest")
             await user.add_roles(guest_role)
-        elif str(reaction.emoji) == "<:Eve:944297441723830314>":
-            tester_role = discord.utils.get(
-                user.guild.roles, name="Beta Tester")
+        elif str(reaction) == "<:Eve:944297441723830314>":
+            tester_role = discord.utils.get(guild.roles, name="Beta Tester")
             await user.add_roles(tester_role)
 
     @commands.Cog.listener()
