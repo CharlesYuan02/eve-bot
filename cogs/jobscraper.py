@@ -54,7 +54,6 @@ class JobScraper(commands.Cog):
 
     def __init__(self, client):  # References whatever is passed through the client from discord
         self.client = client
-        self.q = Queue(connection=conn)
 
     @commands.command(aliases=["job", "find_job", "find_jobs", "get_job", "get_jobs"])
     async def jobs(self, ctx, *, query):
@@ -66,7 +65,8 @@ class JobScraper(commands.Cog):
         key_terms = [term.strip() for term in key_terms]
         num_jobs = int(key_terms[2]) if key_terms[2] else 15
         
-        ret = self.q.enqueue(get_jobs(key_terms[0], key_terms[1]), "http://heroku.com")
+        q = Queue(connection=conn)
+        ret = q.enqueue(get_jobs(key_terms[0], key_terms[1]), "http://heroku.com")
 
         await ctx.send("Here is what I found:")
 
