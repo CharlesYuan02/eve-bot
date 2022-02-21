@@ -22,7 +22,9 @@ def get_jobs(job_title, location):
     '''Max returned number of jobs is 15 per page.'''
     global ret
     url = get_url(job_title, location)
+    print(f"URL: {url}")
     response = requests.get(url)
+    print(f"Responses: {response}")
     soup = BeautifulSoup(response.text, "html.parser")
 
     job_names = []
@@ -67,12 +69,16 @@ class JobScraper(commands.Cog):
 
         key_terms = query.split(",")
         key_terms = [term.strip() for term in key_terms]
-        num_jobs = int(key_terms[2]) if key_terms[2] else 15
+        if len(key_terms) == 3:
+            num_jobs = key_terms[2]
+        else:
+            num_jobs = 15
         
         # ret = get_jobs(key_terms[0], key_terms[1])
         job = self.q.enqueue(get_jobs, key_terms[0], key_terms[1])
 
         await ctx.send("Here is what I found:")
+        print(ret)
             
         for i in range(num_jobs):
             await ctx.send("```" +
