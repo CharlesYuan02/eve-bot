@@ -26,10 +26,12 @@ def get_jobs(job_title, location):
     response = requests.get(url)
     print(f"Responses: {response}")
     soup = BeautifulSoup(response.text, "html.parser")
+    print(soup)
 
     job_names = []
     for job_name in soup.find_all("h2", class_="jobTitle"):
         job_names.append(job_name.get_text())
+    print(job_names)
     
     companies = []
     for company in soup.find_all("span", class_="companyName"):
@@ -53,6 +55,7 @@ def get_jobs(job_title, location):
         links.append(link)
     
     ret = [job_names, companies, locations, salaries, links]
+    print(ret)
 
 
 class JobScraper(commands.Cog):
