@@ -18,15 +18,23 @@ def get_url(position, location):
     return url
 
 
+def enqueue_request(url):
+    global response
+    response = requests.get(url)
+    print(f"Responses: {response}")
+
+
 def get_jobs(job_title, location):
     '''Max returned number of jobs is 15 per page.'''
     global ret
+    global response
     url = get_url(job_title, location)
-    print(f"URL: {url}")
-    response = requests.get(url)
+    
+    q = Queue(connection=conn)
+    job = q.enqueue(enqueue_request, url)
     print(f"Responses: {response}")
+
     soup = BeautifulSoup(response.text, "html.parser")
-    print(soup)
 
     job_names = []
     for job_name in soup.find_all("h2", class_="jobTitle"):
@@ -78,10 +86,9 @@ class JobScraper(commands.Cog):
             num_jobs = 15
         
         # ret = get_jobs(key_terms[0], key_terms[1])
-        job = self.q.enqueue(get_jobs, key_terms[0], key_terms[1])
+        ret = get_jobs(key_terms[0], key_terms[1])
 
         await ctx.send("Here is what I found:")
-        print(ret)
             
         for i in range(num_jobs):
             await ctx.send("```" +
