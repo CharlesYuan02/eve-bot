@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from rq import Queue
 from worker import conn
 ret = []
-
+response = None
 
 def get_url(position, location):
     '''Generate url from position and location'''
@@ -32,6 +32,9 @@ def get_jobs(job_title, location):
     
     q = Queue(connection=conn)
     job = q.enqueue(enqueue_request, url)
+    while not response:
+        print("Waiting...")
+        time.sleep(1)
     print(f"Responses: {response}")
 
     soup = BeautifulSoup(response.text, "html.parser")
