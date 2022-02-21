@@ -73,9 +73,6 @@ class JobScraper(commands.Cog):
         job = self.q.enqueue(get_jobs, key_terms[0], key_terms[1])
 
         await ctx.send("Here is what I found:")
-        while ret == []:
-            print("Waiting in queue...")
-            time.sleep(1)
             
         for i in range(num_jobs):
             await ctx.send("```" +
