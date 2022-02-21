@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from rq import Queue
 from worker import conn
+ret = []
 
 
 def get_url(position, location):
@@ -16,8 +17,9 @@ def get_url(position, location):
     return url
 
 
-def get_jobs(ctx, job_title, location, num_jobs=1):
+def get_jobs(job_title, location):
     '''Max returned number of jobs is 15 per page.'''
+    global ret
     url = get_url(job_title, location)
     response = requests.get(url)
     soup = BeautifulSoup(response.text, "html.parser")
@@ -47,15 +49,7 @@ def get_jobs(ctx, job_title, location, num_jobs=1):
         link = "https://indeed.com" + link
         links.append(link)
     
-    await ctx.send("Here is what I found:")
-    for i in range(num_jobs):
-        await ctx.send("```" +
-            f"\nTitle: {job_namesi]}" + 
-            f"\nCompany: {companies[i]}" + 
-            f"\nLocation: {locations[i]}" +
-            f"\nSalary: {salaries[i]}" + 
-            f"\nLink: {links[i]}" +
-            "\n```")
+    ret = [job_names, companies, locations, salaries, links]
 
 
 class JobScraper(commands.Cog):
@@ -74,7 +68,19 @@ class JobScraper(commands.Cog):
         key_terms = [term.strip() for term in key_terms]
         num_jobs = int(key_terms[2]) if key_terms[2] else 15
         
-        ret = self.q.enqueue(get_jobs, ctx, key_terms[0], key_terms[1], num_jobs)
+        # ret = get_jobs(key_terms[0], key_terms[1])
+        job = self.q.enqueue(get_jobs, key_terms[0], key_terms[1])
+
+        await ctx.send("Here is what I found:")
+
+        for i in range(num_jobs):
+            await ctx.send("```" +
+                f"\nTitle: {ret[0][i]}" + 
+                f"\nCompany: {ret[1][i]}" + 
+                f"\nLocation: {ret[2][i]}" +
+                f"\nSalary: {ret[3][i]}" + 
+                f"\nLink: {ret[4][i]}" +
+                "\n```")
 
 
 def setup(client):
