@@ -66,7 +66,7 @@ class JobScraper(commands.Cog):
         key_terms = [term.strip() for term in key_terms]
         num_jobs = int(key_terms[2]) if key_terms[2] else 15
         
-        ret = q.enqueue(get_jobs, key_terms[0], key_terms[1])
+        ret = self.q.enqueue(get_jobs, key_terms[0], key_terms[1])
 
         await ctx.send("Here is what I found:")
 
