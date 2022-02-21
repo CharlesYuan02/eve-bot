@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import random
 import requests
+import time
 from bs4 import BeautifulSoup
 from rq import Queue
 from worker import conn
@@ -74,6 +75,7 @@ class JobScraper(commands.Cog):
         await ctx.send("Here is what I found:")
         while ret == []:
             print("Waiting in queue...")
+            time.sleep(1)
             
         for i in range(num_jobs):
             await ctx.send("```" +
