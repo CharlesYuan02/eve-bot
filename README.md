@@ -7,4 +7,6 @@ If you would like more information on her different commands, please refer to my
 
 https://charles-yuan.netlify.app/eve.html
 
+Update 02/21/2022: Eve has now been migrated to nextcord and is now the official bot of the EngSci Machine Intelligence 2T4 server!
+
 <img src="https://i.ytimg.com/vi/o-l269A9I38/maxresdefault.jpg">
