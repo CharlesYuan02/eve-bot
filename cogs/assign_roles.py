@@ -1,6 +1,5 @@
-import discord
-from discord.ext import commands
-import random
+import nextcord
+from nextcord.ext import commands
 
 
 class AssignRoles(commands.Cog):
@@ -21,16 +20,16 @@ class AssignRoles(commands.Cog):
             return
 
         if str(reaction) == "<:Lacia:944271608711872583>":
-            mi_role = discord.utils.get(guild.roles, name="MI Major")
+            mi_role = nextcord.utils.get(guild.roles, name="MI Major")
             await user.add_roles(mi_role)
         elif str(reaction) == "<:Vivy:944271916426985532>":
-            ai_role = discord.utils.get(guild.roles, name="AI Minor")
+            ai_role = nextcord.utils.get(guild.roles, name="AI Minor")
             await user.add_roles(ai_role)
         elif str(reaction) == "<:Miku:944272417180774420>":
-            guest_role = discord.utils.get(guild.roles, name="Guest")
+            guest_role = nextcord.utils.get(guild.roles, name="Guest")
             await user.add_roles(guest_role)
         elif str(reaction) == "<:Eve:944297441723830314>":
-            tester_role = discord.utils.get(guild.roles, name="Beta Tester")
+            tester_role = nextcord.utils.get(guild.roles, name="Beta Tester")
             await user.add_roles(tester_role)
 
     @commands.Cog.listener()
@@ -46,19 +45,19 @@ class AssignRoles(commands.Cog):
             return
 
         if str(reaction) == "<:Lacia:944271608711872583>":
-            mi_role = discord.utils.get(guild.roles, name="MI Major")
+            mi_role = nextcord.utils.get(guild.roles, name="MI Major")
             await user.remove_roles(mi_role)
         elif str(reaction) == "<:Vivy:944271916426985532>":
-            ai_role = discord.utils.get(guild.roles, name="AI Minor")
+            ai_role = nextcord.utils.get(guild.roles, name="AI Minor")
             await user.remove_roles(ai_role)
         elif str(reaction) == "<:Miku:944272417180774420>":
-            guest_role = discord.utils.get(guild.roles, name="Guest")
+            guest_role = nextcord.utils.get(guild.roles, name="Guest")
             await user.remove_roles(guest_role)
         elif str(reaction) == "<:Eve:944297441723830314>":
-            tester_role = discord.utils.get(guild.roles, name="Beta Tester")
+            tester_role = nextcord.utils.get(guild.roles, name="Beta Tester")
             await user.remove_roles(tester_role)
 
-    @ commands.command(aliases=["assign_role", "get_role", "get_roles"])
+    @commands.command(aliases=["assign_role", "get_role", "get_roles"])
     async def assign_roles(self, ctx):
         if str(ctx.author) == "Chubbyman#3362":
             await ctx.channel.purge(limit=1)
