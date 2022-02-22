@@ -1,5 +1,5 @@
-import discord
-from discord.ext import commands
+import nextcord
+from nextcord.ext import commands
 import random
 
 
@@ -28,8 +28,7 @@ class Gifs(commands.Cog):
                         "https://38.media.tumblr.com/tumblr_lwp9gvzM4n1qd4f2uo1_500.gif",
                         "https://i.gifer.com/8Lnq.gif",
                         "https://i.pinimg.com/originals/2b/40/18/2b40185d04e8e6b774f7612623a5ae30.gif"]
-        # print(repr(member))
-        if repr(member) == "'<@!336329924891639818>'" or repr(member) == "'<@!702350983191068672>'":
+        if repr(member) == "'<@!336329924891639818>'":
             await ctx.send("No.")
         else:
             await ctx.send(f"{member}, prepare to die!")
@@ -37,8 +36,6 @@ class Gifs(commands.Cog):
 
     @commands.command(aliases=["bully"])
     async def shit_on(self, ctx, *, member):
-        people = ["'<@!280788601086672897>'", "'<@!277889218167177216>'"]
-        # if repr(member) in people:
         if str(member) == "<@!336329924891639818>":  # This is me
             await ctx.send("No.")
         else:
