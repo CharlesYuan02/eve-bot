@@ -1,12 +1,12 @@
-import discord
-from discord.ext import commands
+import nextcord
+from nextcord.ext import commands
 import random 
 
 
 # As suggested by Amaterasu#1541
 class Neko(commands.Cog):
 
-    def __init__(self, client):  # References whatever is passed through the client from discord
+    def __init__(self, client):
         self.client = client
 
     @commands.command(aliases=["nyaa", "meow", "mew"])
@@ -24,7 +24,6 @@ class Neko(commands.Cog):
                          "https://media.tenor.com/images/ed1c69aa20cd18d6efb92e9a7e8a1404/tenor.gif",
                          "https://media1.tenor.com/images/a66d5af4be501deb2ac4ab513a34af17/tenor.gif?itemid=16054619",
                          "https://pa1.narvii.com/6260/c870d95b4429b1e27da5e5bbc926bf1ebf0f7c17_hq.gif"]
-
         await ctx.send(random.choice(list_of_nekos))
 
 
