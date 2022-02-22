@@ -1,34 +1,28 @@
-import discord
-from discord.ext import commands
-
-nuke = False
-abort = False
+import nextcord
+from nextcord.ext import commands
 
 
 class Nuke(commands.Cog):
 
-    def __init__(self, client):  # References whatever is passed through the client from discord
+    def __init__(self, client): 
         self.client = client
+        self.nuke = False
 
     @commands.command()
     async def nuke(self, ctx, *, passcode):
         passcode = passcode.lower()
         if str(ctx.author) == "Chubbyman#3362":
             if "genocidal" in passcode and "organ" in passcode:
-                global nuke
-                nuke = True
-
+                self.nuke = True
             elif "lucia" in passcode and "sukrova" in passcode:
-                global abort
-                abort = True
-
+                self.nuke = False
             else:
                 await ctx.send("Incorrect passcode.")
 
         else:
             await ctx.send("Sorry, you are not permitted to use this command.")
 
-        while nuke == True and abort != True:
+        while self.nuke:
             await ctx.send("Death to @everyone")
 
 
