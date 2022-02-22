@@ -1,9 +1,23 @@
-import discord
-from discord.ext import commands
+import nextcord
+from nextcord.ext import commands
 import time
 import random
 
-cities = [("Tokyo", 38001000), ("Delhi", 25703168), ("Shanghai", 23740778), ("Sao Paulo", 21066245), ("Mumbai", 21042538),
+
+class Skynet(commands.Cog):
+
+    def __init__(self, client): 
+        self.client = client
+        self.nuke = False
+        self.locked = False
+        self.launching = False
+        self.nuke_gifs = ["https://thumbs.gfycat.com/DelightfulOffensiveFattaileddunnart-size_restricted.gif",
+                          "https://i.pinimg.com/originals/5d/20/24/5d202482e3b485744bc2de8e9cd81cff.gif",
+                          "https://thumbs.gfycat.com/GrotesqueThreadbareArcticseal-size_restricted.gif",
+                          "https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/130/8685105bf19b837b9cb0ea8f2ef05adf_a..gif",
+                          "https://i.pinimg.com/originals/06/c3/92/06c392b847166a9a671bfcd590d8fff7.gif",
+                          "https://i.gifer.com/Hgp9.gif"]
+        self.cities = [("Tokyo", 38001000), ("Delhi", 25703168), ("Shanghai", 23740778), ("Sao Paulo", 21066245), ("Mumbai", 21042538),
           ("Mexico City", 20998543), ("Beijing", 20383994), ("Osaka",
                                                              20237645), ("Cairo", 18771769), ("New York", 18593220),
           ("Dhaka", 17598228), ("Karachi", 16617644), ("Buenos Aires",
@@ -42,46 +56,9 @@ cities = [("Tokyo", 38001000), ("Delhi", 25703168), ("Shanghai", 23740778), ("Sa
                                                        4062605), ("Ji'nan", 4032150), ("Montreal", 3980708),
           ("Dubai", 3384000), ("Waterloo", 593882)]
 
-nuke_gifs = ["https://thumbs.gfycat.com/DelightfulOffensiveFattaileddunnart-size_restricted.gif",
-             "https://i.pinimg.com/originals/5d/20/24/5d202482e3b485744bc2de8e9cd81cff.gif",
-             "https://thumbs.gfycat.com/GrotesqueThreadbareArcticseal-size_restricted.gif",
-             "https://d2u3dcdbebyaiu.cloudfront.net/uploads/atch_img/130/8685105bf19b837b9cb0ea8f2ef05adf_a..gif",
-             "https://i.pinimg.com/originals/06/c3/92/06c392b847166a9a671bfcd590d8fff7.gif",
-             "https://i.gifer.com/Hgp9.gif"]
-nuke = False
-locked = False
-launching = False
-
-
-def test_code():
-    targets = "Shanghai, Karachi, Tokyo"
-    city_list = targets.split(", ")
-    nuke_list = []
-    population_list = []
-    for i in range(len(cities)):
-        if cities[i][0] in city_list:
-            nuke_list.append(cities[i][0])
-            population_list.append(cities[i][1])
-
-    returned_string = "```"
-    for i in range(len(nuke_list)):
-        returned_string += str(nuke_list[i])
-        returned_string += ": "
-        returned_string += str(population_list[i])
-        returned_string += "\n"
-    returned_string += "```"
-    print(returned_string)
-
-
-class Skynet(commands.Cog):
-
-    def __init__(self, client):  # References whatever is passed through the client from discord
-        self.client = client
-
     @commands.command(aliases=["password", "access_code"])
     async def passcode(self, ctx, *, passcode):
-        global nuke
-        if not locked:
+        if not self.locked:
             try:
                 passcode = passcode.lower()
             except:
@@ -89,7 +66,7 @@ class Skynet(commands.Cog):
                 return
 
             if "sarah" in passcode and "connor" in passcode:
-                nuke = True
+                self.nuke = True
                 await ctx.send("Password accepted. Admin access granted.")
 
             else:
@@ -100,30 +77,27 @@ class Skynet(commands.Cog):
 
     @commands.command()
     async def lock(self, ctx):
-        global nuke
         if str(ctx.author) == "Chubbyman#3362":
-            nuke = False
+            self.nuke = False
             await ctx.send("Nuclear strikes are now locked. Password must now be re-entered.")
         else:
             await ctx.send("Apologies, only my master can lock the nukes.")
 
     @commands.command()
     async def admin_lock(self, ctx, *, passcode):
-        global nuke
-        global locked
         try:
             passcode = passcode.lower()
         except:
             await ctx.send("Please input correct admin passcode with command.")
             return
 
-        if "lucia" in passcode and "sukrova" in passcode and str(ctx.author) == "Chubbyman#3362" and not locked:
-            nuke = False
-            locked = True
+        if "lucia" in passcode and "sukrova" in passcode and str(ctx.author) == "Chubbyman#3362" and not self.locked:
+            self.nuke = False
+            self.locked = True
             await ctx.send("Skynet function is now locked.")
 
-        elif "lucia" in passcode and "sukrova" in passcode and str(ctx.author) == "Chubbyman#3362" and locked:
-            locked = False
+        elif "lucia" in passcode and "sukrova" in passcode and str(ctx.author) == "Chubbyman#3362" and self.locked:
+            self.locked = False
             await ctx.send("Skynet function has been unlocked. You may now send nuclear strikes.")
 
     @commands.command()
@@ -133,10 +107,10 @@ class Skynet(commands.Cog):
     @commands.command()
     async def list_cities(self, ctx):
         returned_string = "```"
-        for i in range(len(cities)):
-            returned_string += str(cities[i][0])
+        for i in range(len(self.cities)):
+            returned_string += str(self.cities[i][0])
             returned_string += ": "
-            returned_string += str(cities[i][1])
+            returned_string += str(self.cities[i][1])
             returned_string += "\n"
         returned_string += "```"
         await ctx.send("List of Target Cities:")
@@ -144,8 +118,7 @@ class Skynet(commands.Cog):
 
     @commands.command()
     async def skynet(self, ctx, *, targets=None):
-        global launching
-        if launching:
+        if self.launching:
             await ctx.send("Nuclear strike is already in launch. Please standby.")
 
         else:
@@ -153,19 +126,19 @@ class Skynet(commands.Cog):
                 await ctx.send("Please input a designated target - 'eve skynet [city]'.")
 
             targets = targets.lower()
-            if not nuke and str(ctx.author) != "Chubbyman#3362":
+            if not self.nuke and str(ctx.author) != "Chubbyman#3362":
                 await ctx.send("Please input correct password using 'eve passcode [passcode]' command.")
                 return
 
             else:
-                launching = True
+                self.launching = True
                 city_list = targets.split(", ")
                 nuke_list = []
                 population_list = []
-                for i in range(len(cities)):
-                    if cities[i][0].lower() in city_list:
-                        nuke_list.append(cities[i][0])
-                        population_list.append(cities[i][1])
+                for i in range(len(self.cities)):
+                    if self.cities[i][0].lower() in city_list:
+                        nuke_list.append(self.cities[i][0])
+                        population_list.append(self.cities[i][1])
 
                 returned_string = "```"
                 for i in range(len(nuke_list)):
@@ -175,7 +148,7 @@ class Skynet(commands.Cog):
                     returned_string += "\n"
                 returned_string += "```"
                 if returned_string == "``````":
-                    launching = False
+                    self.launching = False
                     await ctx.send("Target refused. Please input a city with over 4 million residents.\nType 'eve list_cities' for reference list.")
                     return
 
@@ -189,7 +162,7 @@ class Skynet(commands.Cog):
                 await ctx.send("Access granted.")
                 time.sleep(1)
                 await ctx.send(f"Firing {len(nuke_list)}X LGM-30 Minuteman III at targets.")
-                await ctx.send(random.choice(nuke_gifs))
+                await ctx.send(random.choice(self.nuke_gifs))
                 time.sleep(8)
 
                 casualty_list = []
@@ -215,26 +188,25 @@ class Skynet(commands.Cog):
                 await ctx.send(returned_string2)
                 time.sleep(2)
                 await ctx.send("Command execution complete.")
-                launching = False
+                self.launching = False
 
     @commands.command()
     async def skynet_all(self, ctx):
-        global launching
-        if launching:
+        if self.launching:
             await ctx.send("Nuclear strike is already in launch. Please standby.")
 
         else:
-            if not nuke and str(ctx.author) != "Chubbyman#3362":
+            if not self.nuke and str(ctx.author) != "Chubbyman#3362":
                 await ctx.send("Please input correct password using 'eve passcode [passcode]' command.")
                 return
 
             else:
-                launching = True
+                self.launching = True
                 nuke_list = []
                 population_list = []
-                for i in range(len(cities)):
-                    nuke_list.append(cities[i][0])
-                    population_list.append(cities[i][1])
+                for i in range(len(self.cities)):
+                    nuke_list.append(self.cities[i][0])
+                    population_list.append(self.cities[i][1])
 
                 await ctx.send("Command recognized. Preparing to exterminate humanity.")
                 time.sleep(2)
@@ -243,7 +215,7 @@ class Skynet(commands.Cog):
                 await ctx.send("Access granted.")
                 time.sleep(1)
                 await ctx.send(f"Firing {len(nuke_list)}X LGM-30 Minuteman III at targets.")
-                await ctx.send(random.choice(nuke_gifs))
+                await ctx.send(random.choice(self.nuke_gifs))
                 time.sleep(8)
 
                 casualty_list = []
@@ -269,29 +241,28 @@ class Skynet(commands.Cog):
                 await ctx.send(returned_string)
                 time.sleep(2)
                 await ctx.send("Command execution complete.")
-                launching = False
+                self.launching = False
 
     @commands.command()
     async def skynet_purge(self, ctx, *, targets):
-        global launching
-        if launching:
+        if self.launching:
             await ctx.send("Nuclear strike is already in launch. Please standby.")
 
         else:
             targets = targets.lower()
-            if not nuke and str(ctx.author) != "Chubbyman#3362":
+            if not self.nuke and str(ctx.author) != "Chubbyman#3362":
                 await ctx.send("Please input correct password using 'eve passcode [passcode]' command.")
                 return
 
             else:
-                launching = True
+                self.launching = True
                 city_list = targets.split(", ")
                 nuke_list = []
                 population_list = []
-                for i in range(len(cities)):
+                for i in range(len(self.cities)):
                     if cities[i][0].lower() in city_list:
-                        nuke_list.append(cities[i][0])
-                        population_list.append(cities[i][1])
+                        nuke_list.append(self.cities[i][0])
+                        population_list.append(self.cities[i][1])
 
                 returned_string = "```"
                 for i in range(len(nuke_list)):
@@ -301,7 +272,7 @@ class Skynet(commands.Cog):
                     returned_string += "\n"
                 returned_string += "```"
                 if returned_string == "``````":
-                    launching = False
+                    self.launching = False
                     await ctx.send("Target refused. Please input a city with over 4 million residents.\nType 'eve list_cities' for reference list.")
                     return
 
@@ -315,19 +286,19 @@ class Skynet(commands.Cog):
                 await ctx.send("Access granted.")
                 time.sleep(1)
                 await ctx.send(f"Firing 5X LGM-30 Minuteman III at targets in succession.")
-                await ctx.send(nuke_gifs[0])
+                await ctx.send(self.nuke_gifs[0])
                 await ctx.send(f"First nuke impact.")
                 time.sleep(3)
-                await ctx.send(nuke_gifs[1])
+                await ctx.send(self.nuke_gifs[1])
                 await ctx.send(f"Second nuke impact.")
                 time.sleep(3)
-                await ctx.send(nuke_gifs[2])
+                await ctx.send(self.nuke_gifs[2])
                 await ctx.send(f"Third nuke impact.")
                 time.sleep(3)
-                await ctx.send(nuke_gifs[3])
+                await ctx.send(self.nuke_gifs[3])
                 await ctx.send(f"Fourth nuke impact.")
                 time.sleep(3)
-                await ctx.send(nuke_gifs[4])
+                await ctx.send(self.nuke_gifs[4])
                 await ctx.send(f"Fifth nuke impact.")
                 time.sleep(8)
 
@@ -353,7 +324,7 @@ class Skynet(commands.Cog):
                 await ctx.send(returned_string2)
                 time.sleep(2)
                 await ctx.send("Command execution complete.")
-                launching = False
+                self.launching = False
 
 
 def setup(client):
