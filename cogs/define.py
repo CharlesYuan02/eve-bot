@@ -1,5 +1,5 @@
-import discord
-from discord.ext import commands
+import nextcord
+from nextcord.ext import commands
 from bs4 import BeautifulSoup
 import urllib.request
 from PyDictionary import PyDictionary  # install Pydictionary
