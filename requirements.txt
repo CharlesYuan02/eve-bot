@@ -1,5 +1,5 @@
 asyncio
-nextcord
+nextcord==2.0.0a8
 datetime
 bs4
 python-docx
