@@ -1,11 +1,11 @@
-import discord
-from discord.ext import commands
+import nextcord
+from nextcord.ext import commands
 import wikipedia
 
 
 class Wikipedia(commands.Cog):
 
-    def __init__(self, client):  # References whatever is passed through the client from discord
+    def __init__(self, client): 
         self.client = client
 
     @commands.command()
