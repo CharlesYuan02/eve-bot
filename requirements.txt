@@ -1,5 +1,5 @@
 asyncio
-discord
+nextcord
 datetime
 bs4
 python-docx
