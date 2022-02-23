@@ -9,4 +9,6 @@ https://charles-yuan.netlify.app/eve.html
 
 Update 02/21/2022: Eve has now been migrated to nextcord and is now the official bot of the EngSci Machine Intelligence 2T4 server!
 
+Update 02/23/2022: ;-; I can't deploy the chatbot function. Is anyone willing to sponsor me $250/month for the Performance M Dyno package?
+
 <img src="https://i.ytimg.com/vi/o-l269A9I38/maxresdefault.jpg">
