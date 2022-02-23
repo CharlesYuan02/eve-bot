@@ -24,7 +24,7 @@ class Eve():
         @self.client.event  # Cuz client holds instance of Bot
         async def on_ready():  # When the bot has everything it needs and is ready
             await self.client.change_presence(status=nextcord.Status.online, activity=nextcord.Activity(type=nextcord.ActivityType.playing, name="with her sister Lilith"))
-            print("Eve, online and ready!.")
+            print("Eve, online and ready!")
 
 
         @self.client.command()
