@@ -226,9 +226,8 @@ class Eve():
                 self.client.load_extension(f"cogs.{filename[:-3]}")
         
         # Yes, order matters; you have to run this last
-        # TOKEN = os.environ["TOKEN"]
-        # self.client.run(TOKEN)
-        self.client.run("NzIwODIzNjczMTk1NDYyNzk3.XuLlWw.Vsp06vCmKyFda8PaP1VI5kchDhw")
+        TOKEN = os.environ["TOKEN"]
+        self.client.run(TOKEN)
 
 
 if __name__ == "__main__":
