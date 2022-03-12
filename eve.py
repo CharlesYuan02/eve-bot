@@ -46,7 +46,7 @@ class Eve:
                 \nwiki - Returns the first 3 sentences of the Wikipedia entry given a query \nhug - Sends a gif of a hug to a specified user \
                 \nkill - Sends a gruesome gif of a death to a specified user \nshit_on - Eve will insult the specified user \
                 \ndefine - Returns the definition(s) of a word if found```", inline=False)
-            help_embed.add_field(name="Project Management", value="""```toggle_live - Toggle live reminders and updates on or off \
+            help_embed.add_field(name="Project Management", value="```toggle_live - Toggle live reminders and updates on or off \
                 \ntodo - Displays the TODO list for all the incomplete events scheduled for the future \
                 \ndescribe - Display the details of the specified event/task \
                 \nassign - Assigns a specified event/task to a specified user \
@@ -55,7 +55,7 @@ class Eve:
                 \ncat - Adds an event to a specified category \
                 \ndue - Sets the due date of the specified event/task \
                 \nremind - Set how long before the due date to send the users assigned a reminder \
-                \ndone - Marks an event as complete""")
+                \ndone - Marks an event as complete```", inline=False)
             help_embed.add_field(name="Skynet Commands", value="```passcode - 'Sarah Connor' \nlock - Forces the passcode to be re-entered. Can only be used by my master \
                 \nadmin_lock - Completely locks down Skynet commands. Can only be unlocked by my master \nskynet_list - Displays a list of Skynet commands \
                 \nlist_cities - Returns a list of all the cities available for nuking \nskynet - Nukes a specified city(s) from the list \
@@ -205,14 +205,9 @@ class Eve:
             EST = pytz.timezone("US/Eastern")
 
             if not self.praxis_lock:
-                if not self.praxis:
-                    self.praxis = True
-                    self.praxis_time = datetime.datetime.now(EST).strftime("%H:%M:%S")
-                    await ctx.send(f"Praxis bullying has commenced at {self.praxis_time} EST.")
-                elif self.praxis:
-                    self.praxis = False
-                    self.praxis_time = datetime.datetime.now(EST).strftime("%H:%M:%S")
-                    await ctx.send(f"Praxis bullying has been stopped at {self.praxis_time} EST.")
+                self.praxis = not self.praxis
+                self.praxis_time = datetime.datetime.now(EST).strftime("%H:%M:%S")
+                await ctx.send(f"Praxis bullying has {'commenced' if self.praxis else 'been stopped'} at {self.praxis_time} EST.")
 
                 while self.praxis:
                     await ctx.send("Fuck Praxis.")
