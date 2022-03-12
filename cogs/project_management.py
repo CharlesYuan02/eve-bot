@@ -27,7 +27,9 @@ import pytz
 
 _DELAY = 60 # Delay between each check for reminders
 _MAGIC_NUMBER = 0x00abcdef
-
+_ASSIGNED_COLOR = 0x0adbfc
+_UNASSIGNED_COLOR = 0x00ff00
+_COMPLETED_COLOR = 0x00ff00
 class _Task:
     def __init__(self, task_id, create=False):
         self.id             = task_id
@@ -89,7 +91,20 @@ class ProjectManagement(commands.Cog):
 
     @commands.command()
     async def describe(ctx, *, msg):
-        pass
+        for task in ctx.cache:
+            if task.name == msg:
+                # Create embed
+                dict_embed = nextcord.Embed(
+                    title = task.name,
+                    description = f"Due Date: {task.due_date}\n" +\
+                                f"Description: {task.description}\n",
+                    colour = _ASSIGNED_COLOR
+                )
+                dict_embed.set_thumbnail(url="https://media.discordapp.net/attachments/952037974420385793/952038039457267712/Eve_Code_Ultimate_2.png")
+                dict_embed.set_footer(text="Github: https://github.com/jonah-chen/eve-bot")
+                await ctx.send(embed=dict_embed)
+                return
+        await ctx.send("Task not found.")
 
     @commands.command()
     async def assign(ctx, member: nextcord.Member = None, *, msg):
@@ -217,6 +232,6 @@ class ProjectManagement(commands.Cog):
         task.update()
         await ctx.send(f"Task {task.name} will be reminded in {number}s before due date.")
 
-    @commands.command()
+    @commands.command(aliases=['complete', 'completed', 'finish', 'finish_task', 'finished'])
     async def remove_task(ctx, *, msg):
         pass
