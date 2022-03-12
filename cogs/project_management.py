@@ -30,18 +30,20 @@ _MAGIC_NUMBER = 0x00abcdef
 _ASSIGNED_COLOR = 0x0adbfc
 _UNASSIGNED_COLOR = 0x00ff00
 _COMPLETED_COLOR = 0x00ff00
+_NORMAL = 1
+_COMPLETE = 2
+
 class _Task:
     def __init__(self, task_id, create=False):
-        self.id             = task_id
-        self.name           = ""
-        self.type           = 0
-        self.status         = 0
-        self.date           = 0
-        self.remind_date    = 0
-        self.assignees      = []
-        self.description    = ""
-
+        self.id = task_id
         if create:
+            self.name           = ""
+            self.type           = 0
+            self.status         = _NORMAL
+            self.date           = 0
+            self.remind_date    = 0
+            self.assignees      = []
+            self.description    = ""
             self.update()
             
         else:
@@ -90,8 +92,8 @@ class ProjectManagement(commands.Cog):
         await asyncio.sleep(_DELAY)
 
     @commands.command()
-    async def describe(ctx, *, msg):
-        for task in ctx.cache:
+    async def describe(self, ctx, *, msg):
+        for task in self.cache:
             if task.name == msg:
                 # Create embed
                 dict_embed = nextcord.Embed(
@@ -107,11 +109,22 @@ class ProjectManagement(commands.Cog):
         await ctx.send("Task not found.")
 
     @commands.command()
-    async def assign(ctx, member: nextcord.Member = None, *, msg):
-        pass
+    async def assign(self, ctx, member: nextcord.Member = None, *, msg):
+        for task in self.cache:
+            if task.name == msg:
+                if member is None:
+                    await ctx.send("Please specify a member.")
+                    return
+                if member.id in task.assignees:
+                    await ctx.send("Member already assigned.")
+                    return
+                task.assignees.append(member.id)
+                task.update()
+                await ctx.send(f"{member.mention} has been assigned to {task.name}.")
+                return     
 
-    @commands.command()
-    async def add_task(ctx, *, msg):
+    @commands.command(aliases=['task', 'new_task'])
+    async def add_task(self, ctx, *, msg):
         if any(c.isspace() for c in msg):
             await ctx.send("Task name cannot contain spaces.")
             return
@@ -128,19 +141,18 @@ class ProjectManagement(commands.Cog):
         # add task to cache
         ctx.cache.add(_Task(task_id, True))
 
-
     @commands.command(aliases=['categlorize', 'add_to_category', 'set_type'])
     async def cat(ctx, *, msg):
-        pass
+        await ctx.send("Not implemented.")
 
     @commands.command(aliases=['due_date', 'set_due_date'])
-    async def due(ctx, *, msg):
+    async def due(self, ctx, *, msg):
         now = datetime.datetime.now(pytz.timezone('US/Eastern'))
         today = now.replace(hour=0, minute=0, second=0, microsecond=0)
         tomorrow = today + datetime.timedelta(days=1)
         task = msg.split()[0]
         parts = msg[len(task):].split()
-        for t in ctx.cache:
+        for t in self.cache:
             if t.name == task:
                 task = t
                 break
@@ -194,9 +206,9 @@ class ProjectManagement(commands.Cog):
 
 
     @commands.command(aliases=['set_reminder'])
-    async def remind(ctx, *, msg):
+    async def remind(self, ctx, *, msg):
         task = msg.split()[0]
-        for t in ctx.cache:
+        for t in self.cache:
             if t.name == task:
                 task = t
                 break
@@ -233,5 +245,10 @@ class ProjectManagement(commands.Cog):
         await ctx.send(f"Task {task.name} will be reminded in {number}s before due date.")
 
     @commands.command(aliases=['complete', 'completed', 'finish', 'finish_task', 'finished'])
-    async def remove_task(ctx, *, msg):
-        pass
+    async def done(self, ctx, *, msg):
+        for t in self.cache:
+            if t.name == msg:
+                t.status = _COMPLETE
+                t.update()
+                return
+        await ctx.send("Task not found.")
