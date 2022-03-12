@@ -64,8 +64,8 @@ Eve has now been migrated to nextcord and is now the official bot of the EngSci 
 Eve now has embeds! They're integrated into the help, define, and wiki commands.
 
 <p float="left">
-<img src="https://github.com/Chubbyman2/eve-bot/blob/main/docs/eve_embed_sample_2.PNG" width="413">
-<img src="https://github.com/Chubbyman2/eve-bot/blob/main/docs/eve_embed_sample.png" width="413">
+<img src="https://github.com/Chubbyman2/eve-bot/blob/main/docs/eve_embed_sample_2.PNG" width="412">
+<img src="https://github.com/Chubbyman2/eve-bot/blob/main/docs/eve_embed_sample.png" width="412">
 </p>
 
 ## License
