@@ -46,6 +46,16 @@ class Eve:
                 \nwiki - Returns the first 3 sentences of the Wikipedia entry given a query \nhug - Sends a gif of a hug to a specified user \
                 \nkill - Sends a gruesome gif of a death to a specified user \nshit_on - Eve will insult the specified user \
                 \ndefine - Returns the definition(s) of a word if found```", inline=False)
+            help_embed.add_field(name="Project Management", value="""```toggle_live - Toggle live reminders and updates on or off \
+                \ntodo - Displays the TODO list for all the incomplete events scheduled for the future \
+                \ndescribe - Display the details of the specified event/task \
+                \nassign - Assigns a specified event/task to a specified user \
+                \nadd_task - Adds a task to the TODO list \
+                \nadd_desc - Adds a description to the specified event/task \
+                \ncat - Adds an event to a specified category \
+                \ndue - Sets the due date of the specified event/task \
+                \nremind - Set how long before the due date to send the users assigned a reminder \
+                \ndone - Marks an event as complete""")
             help_embed.add_field(name="Skynet Commands", value="```passcode - 'Sarah Connor' \nlock - Forces the passcode to be re-entered. Can only be used by my master \
                 \nadmin_lock - Completely locks down Skynet commands. Can only be unlocked by my master \nskynet_list - Displays a list of Skynet commands \
                 \nlist_cities - Returns a list of all the cities available for nuking \nskynet - Nukes a specified city(s) from the list \

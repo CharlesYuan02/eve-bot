@@ -105,17 +105,6 @@ class ProjectManagement(commands.Cog):
 
         return dict_embed
 
-    @commands.command(aliases=["dummy2"])
-    async def dummy(self, ctx, member: nextcord.Member = None, *, msg):
-        try:
-            await ctx.send(f"One second...{msg}")
-            channel = await self.client.create_dm(mySnowFlake(member.id))
-            await channel.send(f"asdflkj")
-            print("user")
-
-        except Exception as e:
-            print(e)
-
     def __init__(self, client) -> None:
         self.client = client
         self.reminders = False
@@ -161,11 +150,6 @@ class ProjectManagement(commands.Cog):
 
             await asyncio.sleep(_DELAY)
 
-    @commands.command(aliases=['toggle_reminder'])
-    async def toggle_reminders(self, ctx):
-        self.reminders = not self.reminders
-        await ctx.send(f"Reminders are now {'enabled' if self.reminders else 'disabled'}")
-
     @commands.command(aliases=['timeline'])
     async def todo(self, ctx):
         tasks = [t for t in self.cache if t.status != _COMPLETE]
@@ -191,21 +175,18 @@ class ProjectManagement(commands.Cog):
 
     @commands.command()
     async def assign(self, ctx, member: nextcord.Member = None, *, msg):
-        try:
-            for task in self.cache:
-                if task.name == msg:
-                    if member is None:
-                        await ctx.send("Please specify a member.")
-                        return
-                    if member.id in task.assignees:
-                        await ctx.send("Member already assigned.")
-                        return
-                    task.assignees.append(member.id)
-                    task.update()
-                    await ctx.send(f"`{member.name}` has been assigned to `{task.name}`.")
+        for task in self.cache:
+            if task.name == msg:
+                if member is None:
+                    await ctx.send("Please specify a member.")
                     return
-        except Exception as e:
-            print(e)
+                if member.id in task.assignees:
+                    await ctx.send("Member already assigned.")
+                    return
+                task.assignees.append(member.id)
+                task.update()
+                await ctx.send(f"`{member.name}` has been assigned to `{task.name}`.")
+                return
         await ctx.send("Task not found.")
 
     @commands.command(aliases=['task', 'new_task', 'create', 'add'])
@@ -231,8 +212,8 @@ class ProjectManagement(commands.Cog):
         self._write_cache()
         await ctx.send(f"Task `{msg}` has been created.")
 
-    @commands.command(aliases=['+', 'description'])
-    async def add_description(self, ctx, *, msg):
+    @commands.command(aliases=['+', 'description', 'add_description'])
+    async def add_desc(self, ctx, *, msg):
         fpos = msg.find(" ")
         task = msg[:fpos]
         description = msg[fpos+1:]
