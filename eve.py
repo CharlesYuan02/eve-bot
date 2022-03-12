@@ -25,25 +25,31 @@ class Eve():
 
         @self.client.command()
         async def help(ctx):
-            await ctx.send("To see a full list of my commands and how to use them, please refer to my personal webpage.")
-            await ctx.send("https://charles-yuan.netlify.app/eve.html")
-            await ctx.send("```General/Admin Commands: \n\thelp - Displays this message \n\tclear - Clears a specified number of preceding lines \
-                \n\tkick - Kicks a specified user \n\tban - Bans a specified user \n\tunban - Unbans a specified user \n\tload - Loads a specified cog \
-                \n\tunload - Unloads a specified cog \n\tpoke - Sends a dm to a specified user with your user signature \
-                \n\tgive_flowers - Sends flowers to a specified user \n\tpm - Sends a private message to a specified user \
-                \n\tapm - Sends an anonymous private message to a specified user \
-                \n\tunlock_praxis, lock_praxis - Unlocks/locks the fuck_praxis command \n\tfuck_praxis - Every hour, send the message 'Fuck Praxis' in the chat \
-                \n\thowweeb - How much of a weeb are you? \n\thyperactive - Unleashes Eve's hyperactive skill: Odin Spear```")
-            await ctx.send("```Cog Commands: \n\t8ball - Ask Eve a random yes/no question, and she will reply from a list of responses \
-                \n\tyoutube - Eve will return the first video she finds on Youtube given a query \n\tneko - Returns a picture of a neko \
-                \n\twiki - Returns the first 3 sentences of the Wikipedia entry given a query \n\thug - Sends a gif of a hug to a specified user \
-                \n\tkill - Sends a gruesome gif of a death to a specified user \n\tshit_on - Eve will insult the specified user \
-                \n\tdefine - Returns the definition(s) of a word if found \n\tsynonym - Returns the synonym(s) of a word if found \
-                \n\tantonym - Returns the antonym(s) of a word if found```")
-            await ctx.send("```Skynet Commands: \n\tpasscode - 'Sarah Connor' \n\tlock - Forces the passcode to be re-entered. Can only be used by my master \
-                \n\tadmin_lock - Completely locks down Skynet commands. Can only be unlocked by my master \n\tskynet_list - Displays a list of Skynet commands \
-                \n\tlist_cities - Returns a list of all the cities available for nuking \n\tskynet - Nukes a specified city(s) from the list \
-                \n\tskynet_all - Nukes all the cities on the list \n\tskynet_purge - Continuously nukes all the cities on the list until there are no survivors```")
+            help_embed = nextcord.Embed(
+                title = "List of Commands",
+                description = "To see a full list of my commands and how to use them, please refer to my personal webpage: \nhttps://charles-yuan.netlify.app/eve.html",
+                colour = 0x0adbfc
+            )
+            help_embed.set_author(name="Chubbyman", icon_url="https://avatars.githubusercontent.com/u/70110720?s=400&u=ce8fccea831f916059794c992dd0ce1a3e77ac2c&v=4")
+            help_embed.set_thumbnail(url="https://media.discordapp.net/attachments/952037974420385793/952038039457267712/Eve_Code_Ultimate_2.png")
+            help_embed.set_footer(text="Github: https://github.com/Chubbyman2/eve-bot")
+            help_embed.add_field(name="General/Admin Commands", value="```help - Displays this message \nclear - Clears a specified number of preceding lines \
+                \nkick - Kicks a specified user \nban - Bans a specified user \nunban - Unbans a specified user \nload - Loads a specified cog \
+                \nunload - Unloads a specified cog \npoke - Sends a dm to a specified user with your user signature \
+                \ngive_flowers - Sends flowers to a specified user \npm - Sends a private message to a specified user \
+                \napm - Sends an anonymous private message to a specified user \
+                \nunlock_praxis, lock_praxis - Unlocks/locks the fuck_praxis command \nfuck_praxis - Every hour, send the message 'Fuck Praxis' in the chat \
+                \nhowweeb - How much of a weeb are you? \nhyperactive - Unleashes Eve's hyperactive skill: Odin Spear```", inline=False)
+            help_embed.add_field(name="Cog Commands", value="```8ball - Ask Eve a random yes/no question, and she will reply from a list of responses \
+                \nyoutube - Eve will return the first video she finds on Youtube given a query \nneko - Returns a picture of a neko \
+                \nwiki - Returns the first 3 sentences of the Wikipedia entry given a query \nhug - Sends a gif of a hug to a specified user \
+                \nkill - Sends a gruesome gif of a death to a specified user \nshit_on - Eve will insult the specified user \
+                \ndefine - Returns the definition(s) of a word if found```", inline=False)
+            help_embed.add_field(name="Skynet Commands", value="```passcode - 'Sarah Connor' \nlock - Forces the passcode to be re-entered. Can only be used by my master \
+                \nadmin_lock - Completely locks down Skynet commands. Can only be unlocked by my master \nskynet_list - Displays a list of Skynet commands \
+                \nlist_cities - Returns a list of all the cities available for nuking \nskynet - Nukes a specified city(s) from the list \
+                \nskynet_all - Nukes all the cities on the list \nskynet_purge - Continuously nukes all the cities on the list until there are no survivors```", inline=False)
+            await ctx.send(embed=help_embed)
 
 
         @self.client.command()
