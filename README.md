@@ -58,7 +58,12 @@ Hugging Face's transformers library provides thousands of pretrained models to p
 Eve has now been migrated to nextcord and is now the official bot of the EngSci Machine Intelligence 2T4 server!
 
 ### Update (Feb 23, 2022):
-Update 02/23/2022: ;-; I can't deploy the chatbot function. Is anyone willing to sponsor me $250/month for the Performance M Dyno package?
+;-; I can't deploy the chatbot function. Is anyone willing to sponsor me $250/month for the Performance M Dyno package?
+
+### Update (Mar 11, 2022):
+Eve now has embeds! They're integrated into the help, define, and wiki commands.
+
+<img src="https://github.com/Chubbyman2/eve-bot/blob/main/docs/eve_embed_sample.png">
 
 ## License
 This project is licensed under the MIT License - see the <a href="https://github.com/Chubbyman2/eve-bot/blob/main/LICENSE">LICENSE</a> file for details.
