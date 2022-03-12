@@ -1,20 +1,16 @@
 import asyncio
-from distutils import command
-from bs4 import BeautifulSoup
 import datetime
 import nextcord
 from nextcord.ext import commands
 import os
 import pytz
 import random
-from requests_html import HTMLSession
 import time
-import urllib.request
 
 
 class Eve():
     def __init__(self):
-        self.client = commands.Bot(command_prefix="eve ", help_command=None)
+        self.client = commands.Bot(command_prefix=["eve ", "Eve "], case_insensitive=True, help_command=None)
         self.praxis_lock = True
         self.praxis = False
         self.praxis_time = None
@@ -35,14 +31,16 @@ class Eve():
                 \n\tkick - Kicks a specified user \n\tban - Bans a specified user \n\tunban - Unbans a specified user \n\tload - Loads a specified cog \
                 \n\tunload - Unloads a specified cog \n\tpoke - Sends a dm to a specified user with your user signature \
                 \n\tgive_flowers - Sends flowers to a specified user \n\tpm - Sends a private message to a specified user \
-                \n\tapm - Sends an anonymous private message to a specified user \n\thyperactive - Unleashes Eve's hyperactive skill: Odin Spear \
-                \nCog Commands: \n\tq - Ask Eve a question; chatbot feature \n\t8ball - Ask Eve a random yes/no question, and she will reply from a list of responses \
+                \n\tapm - Sends an anonymous private message to a specified user \
+                \n\tunlock_praxis, lock_praxis - Unlocks/locks the fuck_praxis command \n\tfuck_praxis - Every hour, send the message 'Fuck Praxis' in the chat \
+                \n\thowweeb - How much of a weeb are you? \n\thyperactive - Unleashes Eve's hyperactive skill: Odin Spear```")
+            await ctx.send("```Cog Commands: \n\t8ball - Ask Eve a random yes/no question, and she will reply from a list of responses \
                 \n\tyoutube - Eve will return the first video she finds on Youtube given a query \n\tneko - Returns a picture of a neko \
                 \n\twiki - Returns the first 3 sentences of the Wikipedia entry given a query \n\thug - Sends a gif of a hug to a specified user \
                 \n\tkill - Sends a gruesome gif of a death to a specified user \n\tshit_on - Eve will insult the specified user \
                 \n\tdefine - Returns the definition(s) of a word if found \n\tsynonym - Returns the synonym(s) of a word if found \
-                \n\tantonym - Returns the antonym(s) of a word if found \
-                \nSkynet Commands: \n\tpasscode - 'Sarah Connor' \n\tlock - Forces the passcode to be re-entered. Can only be used by my master \
+                \n\tantonym - Returns the antonym(s) of a word if found```")
+            await ctx.send("```Skynet Commands: \n\tpasscode - 'Sarah Connor' \n\tlock - Forces the passcode to be re-entered. Can only be used by my master \
                 \n\tadmin_lock - Completely locks down Skynet commands. Can only be unlocked by my master \n\tskynet_list - Displays a list of Skynet commands \
                 \n\tlist_cities - Returns a list of all the cities available for nuking \n\tskynet - Nukes a specified city(s) from the list \
                 \n\tskynet_all - Nukes all the cities on the list \n\tskynet_purge - Continuously nukes all the cities on the list until there are no survivors```")
@@ -221,16 +219,19 @@ class Eve():
             else:
                 await ctx.send("Apologies, you cannot use this command.")
 
+        
         for filename in os.listdir("cogs"):
             if filename.endswith(".py"):
                 # Cuts cog_example.py to cog_example
                 self.client.load_extension(f"cogs.{filename[:-3]}")
         
         # Yes, order matters; you have to run this last
-        TOKEN = os.environ["TOKEN"]
-        self.client.run(TOKEN)
+        # TOKEN = os.environ["TOKEN"]
+        # self.client.run(TOKEN)
+        self.client.run("NzIwODIzNjczMTk1NDYyNzk3.XuLlWw.Vsp06vCmKyFda8PaP1VI5kchDhw")
 
 
 if __name__ == "__main__":
     eve = Eve()
     eve.main()
+    
