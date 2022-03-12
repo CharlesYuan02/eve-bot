@@ -12,20 +12,8 @@ def get_definition(words):
     try:
         htmlfile = urllib.request.urlopen(url)
         soup = BeautifulSoup(htmlfile, "lxml")
-        definition = soup.find(class_="one-click-content css-ibc84h e1q3nk1v1")
+        definition = soup.find(class_="one-click-content css-nnyc96 e1q3nk1v1")
         return definition, soup
-    except:
-        return None, None
-
-
-def get_synonyms(words):
-    word = "-".join(words)
-    url = "https://www.dictionary.com/browse/" + word
-    try:
-        htmlfile = urllib.request.urlopen(url)
-        soup = BeautifulSoup(htmlfile, "lxml")
-        synonyms = soup.find(class_="css-1kva0eo e15p0a5t1")
-        return synonyms, soup
     except:
         return None, None
 
@@ -35,7 +23,7 @@ class Dictionary(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command(aliases=["definition"])
+    @commands.command(aliases=["definition", "def"])
     async def define(self, ctx, *, word):
 
         # First check how many words there are
@@ -47,6 +35,15 @@ class Dictionary(commands.Cog):
             verbs = []
             adjectives = []
             adverbs = []
+
+            # Create embed
+            dict_embed = nextcord.Embed(
+            title = "Dictionary Definition",
+            description = f"Query: {word}",
+            colour = 0x0adbfc
+            )
+            dict_embed.set_thumbnail(url="https://media.discordapp.net/attachments/952037974420385793/952038039457267712/Eve_Code_Ultimate_2.png")
+            dict_embed.set_footer(text="Github: https://github.com/Chubbyman2/eve-bot")
 
             if word.lower() == "praxis":
                 nouns.append(
@@ -77,7 +74,7 @@ class Dictionary(commands.Cog):
                             noun += ")"
                             nouns[nouns.index(temp)] = noun
 
-                await ctx.send("```Nouns: \n-" + "\n-".join(nouns) + "```")
+                dict_embed.add_field(name="Nouns", value="```-" + "\n-".join(nouns) + "```", inline=False)
 
             if len(verbs) != 0:
                 for verb in verbs:
@@ -86,7 +83,7 @@ class Dictionary(commands.Cog):
                         if letter == "(":
                             verb += ")"
                             verbs[verbs.index(temp)] = verb
-                await ctx.send("```Verbs: \n-" + "\n-".join(verbs) + "```")
+                dict_embed.add_field(name="Verbs", value="```-" + "\n-".join(verbs) + "```", inline=False)
 
             if len(adjectives) != 0:
                 for adjective in adjectives:
@@ -95,7 +92,7 @@ class Dictionary(commands.Cog):
                         if letter == "(":
                             adjective += ")"
                             adjectives[adjectives.index(temp)] = adjective
-                await ctx.send("```Adjectives: \n-" + "\n-".join(adjectives) + "```")
+                dict_embed.add_field(name="Adjectives", value="```-" + "\n-".join(adjectives) + "```", inline=False)
 
             if len(adverbs) != 0:
                 for adverb in adverbs:
@@ -104,11 +101,24 @@ class Dictionary(commands.Cog):
                         if letter == "(":
                             adverb += ")"
                             adverbs[adverbs.index(temp)] = adverb
-                await ctx.send("```Adverbs: \n-" + "\n-".join(adverbs) + "```")
+                dict_embed.add_field(name="Adverbs", value="```-" + "\n-".join(adverbs) + "```", inline=False)
+            
+            await ctx.send(embed=dict_embed)
 
         # If it's more than one word
         else:
             await ctx.send("One second...")
+
+            # Create embed
+            embed_query = " ".join(words)
+            dict_embed = nextcord.Embed(
+            title = "Dictionary Definition",
+            description = f"Query: {embed_query}",
+            colour = 0x0adbfc
+            )
+            dict_embed.set_thumbnail(url="https://media.discordapp.net/attachments/952037974420385793/952038039457267712/Eve_Code_Ultimate_2.png")
+            dict_embed.set_footer(text="Github: https://github.com/Chubbyman2/eve-bot")
+
             if get_definition(words)[0] == None:
                 try:
                     word = get_definition(words)[1].find(class_="kw")
@@ -118,7 +128,8 @@ class Dictionary(commands.Cog):
                     if get_definition(words)[0] != None:
                         definition = get_definition(words)[0]
                         definition = definition.get_text()
-                        await ctx.send("```Definition: \n" + str(definition) + "```")
+                        dict_embed.add_field(name="Definition", value="```" + str(definition) + "```", inline=False)
+                        await ctx.send(embed=dict_embed)
                         return
 
                     else:
@@ -132,61 +143,8 @@ class Dictionary(commands.Cog):
             else:
                 definition = get_definition(words)[0]
                 definition = definition.get_text()
-                await ctx.send("```Definition: \n" + str(definition) + "```")
-
-    @commands.command(aliases=["synonyms"])
-    async def synonym(self, ctx, *, word):
-        words = word.split()
-        if len(words) == 1 and dictionary.synonym(words[0]) != None:
-            word = words[0]
-            await ctx.send("One second...")
-            synonyms = []
-            if word.lower() == "praxis":
-                synonyms.append("trash course")
-            elif word.lower() == "calculus":
-                synonyms.append("rigorous course")
-            for synonym in dictionary.synonym(word):
-                synonyms.append(synonym)
-            await ctx.send("```Synonyms: \n" + ", ".join(synonyms) + "```")
-
-        # If it's more than one word
-        else:
-            await ctx.send("One second...")
-            if get_definition(words)[0] == None:
-                try:
-                    word = get_definition(words)[1].find(class_="kw")
-                    word = word.get_text()
-                    words = word.split(" ")
-
-                    if get_synonyms(words)[0] != None:
-                        synonyms = get_synonyms(words)[0]
-                        synonyms = synonyms.get_text()
-                        await ctx.send("```Synonyms: \n" + str(synonyms) + "```")
-                        return
-
-                    else:
-                        await ctx.send(f"Apologies, I could not find any synonyms for {' '.join(words)}.")
-                        return
-
-                except AttributeError:
-                    await ctx.send(f"Apologies, I could not find any synonyms for {' '.join(words)}.")
-                    return
-
-            else:
-                synonyms = get_synonyms(words)[0]
-                synonyms = synonyms.get_text()
-                await ctx.send("```Synonyms: \n" + str(synonyms) + "```")
-
-    @commands.command(aliases=["opposite", "antonyms"])
-    async def antonym(self, ctx, *, word):
-        if dictionary.antonym(word) == None:
-            await ctx.send(f"Apologies, I could not find any antonyms for {word}.")
-            return
-        await ctx.send("One second...")
-        antonyms = []
-        for antonym in dictionary.antonym(word):
-            antonyms.append(antonym)
-        await ctx.send("```Antonyms: \n-" + "\n-".join(antonyms) + "```")
+                dict_embed.add_field(name="Definition", value="```" + str(definition) + "```", inline=False)
+                await ctx.send(embed=dict_embed)
 
 
 def setup(client):
