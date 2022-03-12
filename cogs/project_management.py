@@ -22,6 +22,8 @@ import nextcord
 from nextcord.ext import commands
 from time import time
 import asyncio
+import datetime
+import pytz
 
 _DELAY = 60 # Delay between each check for reminders
 _MAGIC_NUMBER = 0x00abcdef
@@ -38,8 +40,7 @@ class _Task:
         self.description    = ""
 
         if create:
-            with open(f".pmp/{task_id}.task", "w") as f:
-                f.write(f"{self.name}\n{self.type}\n{self.status}\n{self.date}\n{self.remind_date}\n{self.assignees}\n{self.description}")
+            self.update()
             
         else:
             with open(f".pmp/{task_id}.task", "r") as f:
@@ -56,6 +57,10 @@ class _Task:
 
     def __repr__(self):
         return f"<Task {self.id} {self.name}>"
+
+    def update(self):
+        with open(f".pmp/{self.id}.task", "w") as f:
+            f.write(f"{self.name}\n{self.type}\n{self.status}\n{self.date}\n{self.remind_date}\n{self.assignees}\n{self.description}")
 
 
 class ProjectManagement(commands.Cog):
@@ -115,12 +120,102 @@ class ProjectManagement(commands.Cog):
 
     @commands.command(aliases=['due_date', 'set_due_date'])
     async def due(ctx, *, msg):
-        pass
+        now = datetime.datetime.now(pytz.timezone('US/Eastern'))
+        today = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        tomorrow = today + datetime.timedelta(days=1)
+        task = msg.split()[0]
+        parts = msg[len(task):].split()
+        for t in ctx.cache:
+            if t.name == task:
+                task = t
+                break
+
+        if 'tmrw' in msg.lower() or 'tomorrow' in msg.lower() or 'tom' in msg.lower() or 'tmr' in msg.lower():
+            tgt_date = tomorrow
+        elif 'mon' in msg.lower(): # next monday
+            tgt_date = today + datetime.timedelta(days=7 - today.weekday())
+        elif 'tue' in msg.lower(): # next tuesday
+            tgt_date = today + datetime.timedelta(days=1 - today.weekday())
+        elif 'wed' in msg.lower(): # next wednesday
+            tgt_date = today + datetime.timedelta(days=2 - today.weekday())
+        elif 'thu' in msg.lower(): # next thursday
+            tgt_date = today + datetime.timedelta(days=3 - today.weekday())
+        elif 'fri' in msg.lower(): # next friday
+            tgt_date = today + datetime.timedelta(days=4 - today.weekday())
+        elif 'sat' in msg.lower(): # next saturday
+            tgt_date = today + datetime.timedelta(days=5 - today.weekday())
+        elif 'sun' in msg.lower(): # next sunday
+            tgt_date = today + datetime.timedelta(days=6 - today.weekday())
+        else:
+            date_cand = [p for p in parts if p.find('/') != -1]
+            if len(date_cand) != 1:
+                await ctx.send("Invalid date format. Must be in M/D, M/DD, or MM/DD format.")
+                return
+            date_cand = date_cand[0].split('/')
+            month = int(date_cand[0])
+            day = int(date_cand[1])
+            if month < 1 or month > 12 or day < 1 or day > 31:
+                await ctx.send("Invalid date")
+                return
+            tgt_date = datetime.datetime(now.year, month, day, 0, 0, 0, 0, pytz.timezone('US/Eastern'))
+            if tgt_date < now:
+                tgt_date.year += 1
+
+        time_cand = [p for p in parts if p.find(':') != -1]
+        if len(time_cand) != 1:
+            await ctx.send("Invalid time format.")
+            return
+        time_cand = time_cand[0].split(':')
+        hour = int(time_cand[0])
+        minute = int(time_cand[1])
+        if hour < 0 or hour > 23 or minute < 0 or minute > 59:
+            await ctx.send("Invalid time")
+            return
+        tgt_date = tgt_date.replace(hour=hour, minute=minute)
+
+        task.due_date = int(time.mktime(tgt_date.timetuple()))
+        task.update()
+        await ctx.send(f"Task {task.name} is now due on {tgt_date.strftime('%m/%d/%Y %H:%M')}")
+
 
     @commands.command(aliases=['set_reminder'])
     async def remind(ctx, *, msg):
+        task = msg.split()[0]
+        for t in ctx.cache:
+            if t.name == task:
+                task = t
+                break
+        if task.due_date <= 0:
+            await ctx.send("Cannot set reminder for task with no due date.")
+            return
 
-        pass
+        msg = msg[len(task):]
+        number = ''.join([c for c in msg if c.isdigit()])
+        if not number:
+            await ctx.send("Invalid reminder time.")
+            return
+        number = int(number)
+        if number < 1:
+            await ctx.send("Reminder time must be positive.")
+            return
+        
+        if 'min' in msg.lower() or 'm' in msg:
+            number *= 60
+        elif 'h' in msg.lower():
+            number *= 3600
+        elif 'd' in msg.lower():
+            number *= 86400
+        elif 'w' in msg.lower():
+            number *= 604800
+        elif 'mo' in msg.lower() or 'M' in msg:
+            number *= 2592000
+        else:
+            await ctx.send("Invalid reminder time.")
+            return
+        
+        task.remind_date = task.due_date - number
+        task.update()
+        await ctx.send(f"Task {task.name} will be reminded in {number}s before due date.")
 
     @commands.command()
     async def remove_task(ctx, *, msg):
