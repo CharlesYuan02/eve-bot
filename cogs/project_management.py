@@ -68,7 +68,8 @@ class _Task:
 
 
 class ProjectManagement(commands.Cog):
-    def __init__(self) -> None:
+    def __init__(self, client) -> None:
+        self.client = client
         self._read_cache()
         self._read_type_cache()
     
@@ -252,3 +253,7 @@ class ProjectManagement(commands.Cog):
                 t.update()
                 return
         await ctx.send("Task not found.")
+
+
+def setup(client):
+    client.add_cog(ProjectManagement(client))

@@ -6,9 +6,10 @@ import os
 import pytz
 import random
 import time
+from dotenv import load_dotenv
+load_dotenv()
 
-
-class Eve():
+class Eve:
     def __init__(self):
         self.client = commands.Bot(command_prefix=["eve ", "Eve "], case_insensitive=True, help_command=None)
         self.praxis_lock = True
