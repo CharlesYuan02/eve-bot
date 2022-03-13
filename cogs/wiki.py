@@ -2,8 +2,18 @@ import nextcord
 from nextcord.ext import commands
 import wikipedia
 
-
 class Wikipedia(commands.Cog):
+    @staticmethod
+    def purge_displaystyle(text, first_open_brace):
+        depth = 1
+        last_close_brace = first_open_brace + 1
+        while depth:
+            if text[last_close_brace] == "}":
+                depth -= 1
+            elif text[last_close_brace] == "{":
+                depth += 1
+            last_close_brace += 1
+        return text[:first_open_brace] + text[last_close_brace:]
 
     def __init__(self, client): 
         self.client = client
@@ -13,6 +23,12 @@ class Wikipedia(commands.Cog):
         try:
             # Use repr to convert command object to string
             response = wikipedia.summary(repr(keywords), sentences=2)
+            while response.find("{\\displaystyle") != -1:
+                response = Wikipedia.purge_displaystyle(response, response.find("{\\displaystyle"))
+            # remove extra spaces
+            response = response.replace("\n", " ").replace("\r", " ").replace("\t", " ")
+            while response.find("  ") != -1:
+                response = response.replace("  ", " ")
             wiki_embed = nextcord.Embed(
                 title = "Wikipedia Query",
                 description = f"Query: {repr(keywords)}",
