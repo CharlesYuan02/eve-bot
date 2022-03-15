@@ -21,7 +21,7 @@ class Wikipedia(commands.Cog):
     def __init__(self, client): 
         self.client = client
 
-    @commands.command(usage="<keywords", aliases=[])
+    @commands.command(usage="<keywords>", aliases=[])
     async def wiki(self, ctx, *, keywords):
         """
         Search wikipedia.
