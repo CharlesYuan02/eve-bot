@@ -7,6 +7,7 @@ import pytz
 import random
 import time
 
+from cogs.utils import menus
 
 class Eve():
     def __init__(self):
@@ -24,14 +25,14 @@ class Eve():
 
 
         @self.client.command(usage="[command]", aliases=["commands", "q"])
-        async def help(self, ctx, command:str=None, subcommand:str=None):
+        async def help(ctx, command:str=None, subcommand:str=None):
             """
             Shows this help message.
             Add a command to get information about it.
             """
             if command is None: # General help
                 mapping = {cog: cog.get_commands() for cog in self.client.cogs.values()}
-                mapping[None] = self.client.walk_commands()
+                mapping['General'] = [c for c in self.client.walk_commands() if c.cog is None]
                 copy = mapping.copy()
 
                 # Only show commands that the invoker can use
@@ -47,9 +48,10 @@ class Eve():
                 # Default cog commands embed
                 embed = nextcord.Embed(title="Commands")
                 embed.add_field(name="**__General__**",
+                                value="General miscellaneous commands",
                                 inline=False)
 
-                for command in sorted(mapping[cog], key=lambda c: c.name):
+                for command in sorted(mapping['General'], key=lambda c: c.name):
                     embed.add_field(name=command.name, value=command.help.split("\n")[0])
 
                 # Add selection menu to see commands from other cogs

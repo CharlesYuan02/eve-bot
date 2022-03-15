@@ -3,6 +3,9 @@ from nextcord.ext import commands
 
 
 class Nuke(commands.Cog):
+    """
+    I'm sure this won't backfire
+    """
 
     def __init__(self, client): 
         self.client = client

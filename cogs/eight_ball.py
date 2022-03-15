@@ -4,6 +4,9 @@ import random
 
 
 class EightBall(commands.Cog):
+    """
+    Magic 8 Ball wizardry
+    """
 
     def __init__(self, client):
         self.client = client

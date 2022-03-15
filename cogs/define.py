@@ -19,6 +19,9 @@ def get_definition(words):
 
 
 class Dictionary(commands.Cog):
+    """
+    Dictionary definitions
+    """
 
     def __init__(self, client):
         self.client = client

@@ -3,6 +3,9 @@ from nextcord.ext import commands
 import wikipedia
 
 class Wikipedia(commands.Cog):
+    """
+    A bot isn't complete without a wikipedia search command.
+    """
     @staticmethod
     def purge_displaystyle(text, first_open_brace):
         depth = 1

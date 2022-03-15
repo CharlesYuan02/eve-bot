@@ -6,6 +6,9 @@ import re
 
 
 class Media(commands.Cog):
+    """
+    Multimedia commands
+    """
 
     def __init__(self, client):
         self.client = client

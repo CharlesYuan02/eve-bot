@@ -5,6 +5,9 @@ import random
 
 
 class Skynet(commands.Cog):
+    """
+    I'm not self aware nope nuh uh
+    """
 
     def __init__(self, client): 
         self.client = client

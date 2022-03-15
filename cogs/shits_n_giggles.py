@@ -4,6 +4,9 @@ import random
 
 
 class Gifs(commands.Cog):
+    """
+    Interact with others using gifs
+    """
 
     def __init__(self, client):
         self.client = client

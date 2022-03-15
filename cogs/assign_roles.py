@@ -3,6 +3,9 @@ from nextcord.ext import commands
 
 
 class AssignRoles(commands.Cog):
+    """
+    Assign roles using reactions.
+    """
 
     def __init__(self, client):
         self.client = client
