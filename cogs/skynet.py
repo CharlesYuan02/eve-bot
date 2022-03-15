@@ -3,6 +3,8 @@ from nextcord.ext import commands
 import time
 import random
 
+from cogs.utils import checks
+
 
 class Skynet(commands.Cog):
     """
@@ -91,6 +93,7 @@ class Skynet(commands.Cog):
         await ctx.send("Nuclear strikes are now locked. Password must now be re-entered.")
 
     @commands.command(usage="<passcode>", aliases=[])
+    @checks.is_admin()
     async def admin_lock(self, ctx, *, passcode):
         """
         Lock Skynet on a server.
@@ -101,12 +104,12 @@ class Skynet(commands.Cog):
             await ctx.send("Please input correct admin passcode with command.")
             return
 
-        if "lucia" in passcode and "sukrova" in passcode and str(ctx.author) == "Chubbyman#3362" and not self.locked:
+        if "lucia" in passcode and "sukrova" in passcode and not self.locked:
             self.nuke = False
             self.locked = True
             await ctx.send("Skynet function is now locked.")
 
-        elif "lucia" in passcode and "sukrova" in passcode and str(ctx.author) == "Chubbyman#3362" and self.locked:
+        elif "lucia" in passcode and "sukrova" in passcode and self.locked:
             self.locked = False
             await ctx.send("Skynet function has been unlocked. You may now send nuclear strikes.")
 

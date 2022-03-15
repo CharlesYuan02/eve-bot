@@ -7,7 +7,7 @@ import pytz
 import random
 import time
 
-from cogs.utils import menus
+from cogs.utils import menus, checks
 
 class Eve():
     def __init__(self):
@@ -113,6 +113,7 @@ class Eve():
 
 
         @self.client.command(usage="<extension>", aliases=[])
+        @commands.is_owner()
         async def load(ctx, extension):  # The extension is the cog you wish to load
             """
             Load an extension for the bot.
@@ -124,6 +125,7 @@ class Eve():
 
 
         @self.client.command(usage="<extension>", aliases=[])
+        @commands.is_owner()
         async def unload(ctx, extension):
             """
             Unload an extension for the bot.
@@ -143,14 +145,14 @@ class Eve():
 
 
         @self.client.command(usage="<member> [reason]", aliases=[])
+        @checks.is_admin()
         async def kick(ctx, member: nextcord.Member, *, reason=None):
             """
             Kick a server member.
             """
-            await member.kick(reason=reason)
-
 
         @self.client.command(usage="<member> [reason]", aliases=[])
+        @checks.is_admin()
         async def ban(ctx, member: nextcord.Member, *, reason=None):
             """
             Ban a server member.
@@ -160,6 +162,7 @@ class Eve():
         
 
         @self.client.command(usage="<user>", aliases=[])
+        @checks.is_admin()
         # Can't do nextcord.Member, because it can't convert a string to a member object
         async def unban(ctx, *, member):
             """
@@ -249,6 +252,7 @@ class Eve():
 
 
         @self.client.command(usage="[number of messages]", aliases=["delete", "del", "remove"])
+        @checks.is_admin()
         async def clear(ctx, amount=10):  # Clears a specified number of lines
             """
             Delete a specified number of messages.
@@ -317,20 +321,19 @@ class Eve():
 
 
         @self.client.command(usage="", aliases=["praxis_lock", "unlock_praxis", "praxis_unlock"])
+        @commands.is_owner()
         async def lock_praxis(ctx):
             """
             Toggles the functionality of the fuck_praxis command.
             """
-            if str(ctx.author) == "Chubbyman#3362" and self.praxis_lock:
+            if self.praxis_lock:
                 self.praxis_lock = False
                 await ctx.send("Praxis bullying is now unlocked.")
                 return
-            elif str(ctx.author) == "Chubbyman#3362" and not self.praxis_lock:
+            elif not self.praxis_lock:
                 self.praxis_lock = True
                 await ctx.send("Praxis bullying is now locked.")
                 return
-            else:
-                await ctx.send("Apologies, you cannot use this command.")
 
         
         for filename in os.listdir("cogs"):
