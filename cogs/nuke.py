@@ -8,8 +8,11 @@ class Nuke(commands.Cog):
         self.client = client
         self.nuke = False
 
-    @commands.command()
+    @commands.command(usage="<passcode>", aliases=[])
     async def nuke(self, ctx, *, passcode):
+        """
+        Nuke the server.
+        """
         passcode = passcode.lower()
         if str(ctx.author) == "Chubbyman#3362":
             if "genocidal" in passcode and "organ" in passcode:

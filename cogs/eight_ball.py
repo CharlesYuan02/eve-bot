@@ -8,8 +8,11 @@ class EightBall(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command(aliases=["8ball"])
+    @commands.command(usage="<question>", aliases=["8ball"])
     async def _8ball(self, ctx, *, question):
+        """
+        Make good decisions with a magic 8 ball.
+        """
         responses = ["As I see it, yes.",
                      "Ask again later.",
                      "Better not tell you now.",

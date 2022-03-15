@@ -23,8 +23,11 @@ class Dictionary(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command(aliases=["definition", "def"])
+    @commands.command(usage="<word>", aliases=["definition", "def"])
     async def define(self, ctx, *, word):
+        """
+        Define a word.
+        """
 
         # First check how many words there are
         words = word.split()

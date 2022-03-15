@@ -57,8 +57,11 @@ class AssignRoles(commands.Cog):
             tester_role = nextcord.utils.get(guild.roles, name="Beta Tester")
             await user.remove_roles(tester_role)
 
-    @commands.command(aliases=["assign_role", "get_role", "get_roles"])
+    @commands.command(usage="", aliases=["assign_role", "get_role", "get_roles"])
     async def assign_roles(self, ctx):
+        """
+        Send a message to assign roles with reactions.
+        """
         if str(ctx.author) == "Chubbyman#3362":
             await ctx.channel.purge(limit=1)
             message = await ctx.send("Server Roles! Select one to gain access to the relevant channels." +

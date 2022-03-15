@@ -56,8 +56,11 @@ class Skynet(commands.Cog):
                                                        4062605), ("Ji'nan", 4032150), ("Montreal", 3980708),
           ("Dubai", 3384000), ("Waterloo", 593882)]
 
-    @commands.command(aliases=["password", "access_code"])
+    @commands.command(usage="<passcode>", aliases=["password", "access_code"])
     async def passcode(self, ctx, *, passcode):
+        """
+        Log into the Skynet.
+        """
         if not self.locked:
             try:
                 passcode = passcode.lower()
@@ -75,16 +78,22 @@ class Skynet(commands.Cog):
         else:
             await ctx.send("Admin lock is currently active. No nuclear strikes can be sent at this time.")
 
-    @commands.command()
+    @commands.command(usage="", aliases=[])
     async def lock(self, ctx):
+        """
+        Lock Skynet to prevent abuse.
+        """
         if str(ctx.author) == "Chubbyman#3362":
             self.nuke = False
             await ctx.send("Nuclear strikes are now locked. Password must now be re-entered.")
         else:
             await ctx.send("Apologies, only my master can lock the nukes.")
 
-    @commands.command()
+    @commands.command(usage="<passcode>", aliases=[])
     async def admin_lock(self, ctx, *, passcode):
+        """
+        Lock Skynet on a server.
+        """
         try:
             passcode = passcode.lower()
         except:
@@ -100,12 +109,18 @@ class Skynet(commands.Cog):
             self.locked = False
             await ctx.send("Skynet function has been unlocked. You may now send nuclear strikes.")
 
-    @commands.command()
+    @commands.command(usage="", aliases=[])
     async def skynet_list(self, ctx):
+        """
+        List Skynet commands.
+        """
         await ctx.send("List of Skynet commands:\n```skynet_list - lists all commands\nlist_cities - lists all available cities for nuking\nskynet - nukes a specific city\nskynet_all - nukes all cities\nskynet_purge - completely eliminates the population of a specific city```")
 
-    @commands.command()
+    @commands.command(usage="", aliases=[])
     async def list_cities(self, ctx):
+        """
+        List available skynet cities.
+        """
         returned_string = "```"
         for i in range(len(self.cities)):
             returned_string += str(self.cities[i][0])
@@ -116,8 +131,11 @@ class Skynet(commands.Cog):
         await ctx.send("List of Target Cities:")
         await ctx.send(returned_string)
 
-    @commands.command()
+    @commands.command(usage="<target city>", aliases=[])
     async def skynet(self, ctx, *, targets=None):
+        """
+        Launch a nuclear strike on your least favourite city.
+        """
         if self.launching:
             await ctx.send("Nuclear strike is already in launch. Please standby.")
 
@@ -190,8 +208,11 @@ class Skynet(commands.Cog):
                 await ctx.send("Command execution complete.")
                 self.launching = False
 
-    @commands.command()
+    @commands.command(usage="", aliases=[])
     async def skynet_all(self, ctx):
+        """
+        Nuke everything.
+        """
         if self.launching:
             await ctx.send("Nuclear strike is already in launch. Please standby.")
 
@@ -243,8 +264,11 @@ class Skynet(commands.Cog):
                 await ctx.send("Command execution complete.")
                 self.launching = False
 
-    @commands.command()
+    @commands.command(usage="<target cities>", aliases=[])
     async def skynet_purge(self, ctx, *, targets):
+        """
+        Nuke stuff.
+        """
         if self.launching:
             await ctx.send("Nuclear strike is already in launch. Please standby.")
 

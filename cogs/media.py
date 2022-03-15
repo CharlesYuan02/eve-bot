@@ -10,8 +10,11 @@ class Media(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command(aliases=["video"])
+    @commands.command(usage="<search>", aliases=["video"])
     async def youtube(self, ctx, *, search):
+        """
+        Search for a video on youtube.com.
+        """
         search_keyword = search.replace(" ", "_")
         html = urllib.request.urlopen(
             "https://www.youtube.com/results?search_query=" + search_keyword)
