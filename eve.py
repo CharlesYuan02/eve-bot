@@ -7,6 +7,7 @@ import pytz
 import random
 import time
 
+from cogs.utils import menus
 
 class Eve():
     def __init__(self):
@@ -23,45 +24,110 @@ class Eve():
             print("Eve, online and ready!")
 
 
-        @self.client.command()
-        async def help(ctx):
-            help_embed = nextcord.Embed(
-                title = "List of Commands",
-                description = "To see a full list of my commands and how to use them, please refer to my personal webpage: \nhttps://charles-yuan.netlify.app/eve.html",
-                colour = 0x0adbfc
-            )
-            help_embed.set_author(name="Chubbyman", icon_url="https://avatars.githubusercontent.com/u/70110720?s=400&u=ce8fccea831f916059794c992dd0ce1a3e77ac2c&v=4")
-            help_embed.set_thumbnail(url="https://media.discordapp.net/attachments/952037974420385793/952038039457267712/Eve_Code_Ultimate_2.png")
-            help_embed.set_footer(text="Github: https://github.com/Chubbyman2/eve-bot")
-            help_embed.add_field(name="General/Admin Commands", value="```help - Displays this message \nclear - Clears a specified number of preceding lines \
-                \nkick - Kicks a specified user \nban - Bans a specified user \nunban - Unbans a specified user \nload - Loads a specified cog \
-                \nunload - Unloads a specified cog \npoke - Sends a dm to a specified user with your user signature \
-                \ngive_flowers - Sends flowers to a specified user \npm - Sends a private message to a specified user \
-                \napm - Sends an anonymous private message to a specified user \
-                \nunlock_praxis, lock_praxis - Unlocks/locks the fuck_praxis command \nfuck_praxis - Every hour, send the message 'Fuck Praxis' in the chat \
-                \nhowweeb - How much of a weeb are you? \nhyperactive - Unleashes Eve's hyperactive skill: Odin Spear```", inline=False)
-            help_embed.add_field(name="Cog Commands", value="```8ball - Ask Eve a random yes/no question, and she will reply from a list of responses \
-                \nyoutube - Eve will return the first video she finds on Youtube given a query \nneko - Returns a picture of a neko \
-                \nwiki - Returns the first 3 sentences of the Wikipedia entry given a query \nhug - Sends a gif of a hug to a specified user \
-                \nkill - Sends a gruesome gif of a death to a specified user \nshit_on - Eve will insult the specified user \
-                \ndefine - Returns the definition(s) of a word if found```", inline=False)
-            help_embed.add_field(name="Skynet Commands", value="```passcode - 'Sarah Connor' \nlock - Forces the passcode to be re-entered. Can only be used by my master \
-                \nadmin_lock - Completely locks down Skynet commands. Can only be unlocked by my master \nskynet_list - Displays a list of Skynet commands \
-                \nlist_cities - Returns a list of all the cities available for nuking \nskynet - Nukes a specified city(s) from the list \
-                \nskynet_all - Nukes all the cities on the list \nskynet_purge - Continuously nukes all the cities on the list until there are no survivors```", inline=False)
-            await ctx.send(embed=help_embed)
+        @self.client.command(usage="[command]", aliases=["commands"])
+        async def help(ctx, command:str=None, subcommand:str=None):
+            """
+            Shows this help message.
+            Add a command to get information about it.
+            """
+            if command is None: # General help
+                mapping = {cog: cog.get_commands() for cog in self.client.cogs.values()}
+                mapping['General'] = [c for c in self.client.walk_commands() if c.cog is None]
+                copy = mapping.copy()
+
+                # Only show commands that the invoker can use
+                for cog, cmds in copy.items():
+                    for c in cmds:
+                        try:
+                            await c.can_run(ctx)
+                        except commands.CheckFailure:
+                            mapping[cog].remove(c)
+                    if not mapping[cog]:
+                        mapping.pop(cog)
+
+                # Default cog commands embed
+                embed = nextcord.Embed(title="Commands")
+                embed.add_field(name="**__General__**",
+                                value="General miscellaneous commands",
+                                inline=False)
+
+                for command in sorted(mapping['General'], key=lambda c: c.name):
+                    embed.add_field(name=command.name, value=command.help.split("\n")[0])
+
+                # Add selection menu to see commands from other cogs
+                view = None
+                if len(mapping.keys()) > 1:
+                    view = nextcord.ui.View()
+                    view.add_item(menus.HelpMenu(self.client, mapping))
+
+                await ctx.send(embed=embed, view=view)
+                return
+            
+            cmd = self.client.get_command(command) # Command help
+            
+            if cmd is None:
+                await ctx.send("Apologies, that is not a valid command.")
+                return
+
+            if isinstance(cmd, commands.Group) and subcommand is None:
+                try:
+                    await cmd.can_run(ctx)
+                except commands.CheckFailure:
+                    await ctx.send("Apologies, that is not a valid command.")
+                    return
+
+                embed = nextcord.Embed(title=cmd.name + " info",
+                                       description=cmd.help)
+                
+                embed.add_field(name="Aliases",
+                                value=', '.join([self.client.command_prefix[0] + alias for alias in [cmd.name] + sorted(cmd.aliases)]))
+                embed.add_field(name="Usage", value=self.client.command_prefix[0] + cmd.name + " " + cmd.usage)
+                embed.add_field(name="Subcommands", value=', '.join(sorted([command.name for command in cmd.commands])))
+
+                await ctx.send(embed=embed)
+            else:
+                if subcommand is not None:
+                    cmd = self.client.get_command(command+" "+subcommand)
+                    if cmd is None:
+                        await ctx.send("Apologies, that is not a valid command.")
+
+                try:
+                    await cmd.can_run(ctx)
+                except commands.CheckFailure:
+                    await ctx.send("Apologies, that is not a valid command.")
+                    return
 
 
-        @self.client.command()
+                embed = nextcord.Embed(title=cmd.name + " info",
+                                       description=cmd.help)
+
+                embed.add_field(name="Aliases",
+                                value=', '.join([self.client.command_prefix[0]
+                                                + (cmd.parent.name + " " if cmd.parent else '')
+                                                + alias for alias in [cmd.name] + sorted(cmd.aliases)]))
+                embed.add_field(name="Usage", value=self.client.command_prefix[0]
+                                                + (cmd.parent.name + " " if cmd.parent else '')
+                                                + cmd.name + (" " + cmd.usage if cmd.usage else ""))
+
+                await ctx.send(embed=embed)
+
+
+        @self.client.command(usage="<extension>", aliases=[])
         async def load(ctx, extension):  # The extension is the cog you wish to load
+            """
+            Load an extension for the bot.
+            """
             self.client.load_extension(f"cogs.{extension}")
             print("Cog has been successfully loaded.")
             if extension == "nuke":
                 await ctx.send("Nuke loaded.")
 
 
-        @self.client.command()
+        @self.client.command(usage="<extension>", aliases=[])
         async def unload(ctx, extension):
+            """
+            Unload an extension for the bot.
+            """
             self.client.unload_extension(f"cogs.{extension}")
             print("Cog has been successfully unloaded.")
 
@@ -76,20 +142,29 @@ class Eve():
             print(f"{member} has left the server.")
 
 
-        @self.client.command()
+        @self.client.command(usage="<member> [reason]", aliases=[])
         async def kick(ctx, member: nextcord.Member, *, reason=None):
+            """
+            Kick a server member.
+            """
             await member.kick(reason=reason)
 
 
-        @self.client.command()
+        @self.client.command(usage="<member> [reason]", aliases=[])
         async def ban(ctx, member: nextcord.Member, *, reason=None):
+            """
+            Ban a server member.
+            """
             await member.ban(reason=reason)
             await ctx.send(f"Banned {member.mention}")
         
 
-        @self.client.command()
+        @self.client.command(usage="<user>", aliases=[])
         # Can't do nextcord.Member, because it can't convert a string to a member object
         async def unban(ctx, *, member):
+            """
+            Unban a banned user.
+            """
             banned_users = await ctx.guild.bans()
             member_name, member_discriminator = member.split("#")  # Splits account name at #
 
@@ -121,13 +196,19 @@ class Eve():
             await self.client.process_commands(message) # The magic command
         
 
-        @self.client.command()
+        @self.client.command(usage="", aliases=[])
         async def test(ctx):
+            """
+            Test the bot's connection.
+            """
             await ctx.send("Test successful.")
 
 
-        @self.client.command()
+        @self.client.command(usage="[member]", aliases=[])
         async def poke(ctx, member: nextcord.Member = None):
+            """
+            Poke a server member.
+            """
             if member is not None:
                 channel = member.dm_channel
                 if channel is None:  # If user has never talked to Eve
@@ -138,8 +219,11 @@ class Eve():
 
         
         # Private message
-        @self.client.command()
+        @self.client.command(usage="<member> <message>", aliases=[])
         async def pm(ctx, member: nextcord.Member = None, *, message):
+            """
+            Send a server member a private message.
+            """
             if member is not None:
                 channel = member.dm_channel
                 if channel is None:  # If user has never talked to Eve
@@ -150,8 +234,11 @@ class Eve():
 
 
         # Anonymous private message
-        @self.client.command()
+        @self.client.command(usage="<member> <message>")
         async def apm(ctx, member: nextcord.Member = None, *, message):
+            """
+            Send a server member an anonymous private message.
+            """
             if member is not None:
                 channel = member.dm_channel
                 if channel is None:
@@ -161,14 +248,21 @@ class Eve():
                 await ctx.send("Please use @mention to message someone")
 
 
-        @self.client.command(aliases=["delete", "del", "remove"])
+        @self.client.command(usage="[number of messages]", aliases=["delete", "del", "remove"])
         async def clear(ctx, amount=10):  # Clears a specified number of lines
+            """
+            Delete a specified number of messages.
+            Default: 10
+            """
             await ctx.channel.purge(limit=amount)
 
 
         # Gives flowers
-        @self.client.command(aliases=["give_flower", "give_rose", "give_roses", "send_flower", "send_flowers", "send_roses", "send_rose"])
+        @self.client.command(usage="<member>", aliases=["give_flower", "give_rose", "give_roses", "send_flower", "send_flowers", "send_roses", "send_rose"])
         async def give_flowers(ctx, member):
+            """
+            Give a server member flowers.
+            """
             if str(ctx.author) == "Chubbyman#3362":
                 await ctx.send(f"{member}, here is a :rose:, courtesy of your beloved Claire Clayton.")
             else:
@@ -176,21 +270,31 @@ class Eve():
 
 
         # Unleashes Hyperactive skill
-        @self.client.command(aliases=["odin_spear", "hyperactive_skill"])
+        @self.client.command(usage="", aliases=["odin_spear", "hyperactive_skill"])
         async def hyperactive(ctx):
+            """
+            Unleash hyperactive skill.
+            """
             await ctx.send("https://media.giphy.com/media/fFmgzgndHLvfovfK9B/giphy.gif")
             time.sleep(3)
             await ctx.send("https://media.giphy.com/media/bk0pqOHhjfVGphL6Y1/giphy.gif")
 
         
-        @self.client.command(aliases=["howeeb"])
+        @self.client.command(usage="", aliases=["howeeb"])
         async def howweeb(ctx):
+            """
+            Find out how much of a weeb you are.
+            """
             await ctx.send(f"According to my calculations, you are {round(random.random() * 100, 1)}% weeb.")
 
 
         # Every hour, Eve will send the message "Fuck Praxis"
-        @self.client.command()
+        @self.client.command(usage="", aliases=[])
         async def fuck_praxis(ctx):
+            """
+            Fuck Praxis
+            Toggles sending a message once an hour to remind everyone that Praxis sucks.
+            """
             EST = pytz.timezone("US/Eastern")
 
             if not self.praxis_lock:
@@ -212,8 +316,11 @@ class Eve():
                 return
 
 
-        @self.client.command(aliases=["praxis_lock", "unlock_praxis", "praxis_unlock"])
+        @self.client.command(usage="", aliases=["praxis_lock", "unlock_praxis", "praxis_unlock"])
         async def lock_praxis(ctx):
+            """
+            Toggles the functionality of the fuck_praxis command.
+            """
             if str(ctx.author) == "Chubbyman#3362" and self.praxis_lock:
                 self.praxis_lock = False
                 await ctx.send("Praxis bullying is now unlocked.")

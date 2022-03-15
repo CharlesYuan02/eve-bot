@@ -5,12 +5,18 @@ import random
 
 # As suggested by Amaterasu#1541
 class Neko(commands.Cog):
+    """
+    Don't lie, you know you love catgirls
+    """
 
     def __init__(self, client):
         self.client = client
 
-    @commands.command(aliases=["nyaa", "meow", "mew"])
+    @commands.command(usage="", aliases=["nyaa", "meow", "mew"])
     async def neko(self, ctx):
+        """
+        *nya* get a picture of a neko *nya*
+        """
         list_of_nekos = ["https://ih1.redbubble.net/image.608339956.2125/flat,750x,075,f-pad,750x1000,f8f8f8.jpg",
                          "https://i.imgur.com/9FHKGun.jpg",
                          "https://img-9gag-fun.9cache.com/photo/a24mbjw_460s.jpg",

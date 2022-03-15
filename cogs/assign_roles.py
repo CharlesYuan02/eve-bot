@@ -3,6 +3,9 @@ from nextcord.ext import commands
 
 
 class AssignRoles(commands.Cog):
+    """
+    Assign roles using reactions.
+    """
 
     def __init__(self, client):
         self.client = client
@@ -57,21 +60,22 @@ class AssignRoles(commands.Cog):
             tester_role = nextcord.utils.get(guild.roles, name="Beta Tester")
             await user.remove_roles(tester_role)
 
-    @commands.command(aliases=["assign_role", "get_role", "get_roles"])
+    @commands.command(usage="", aliases=["assign_role", "get_role", "get_roles"])
+    @commands.is_owner()
     async def assign_roles(self, ctx):
-        if str(ctx.author) == "Chubbyman#3362":
-            await ctx.channel.purge(limit=1)
-            message = await ctx.send("Server Roles! Select one to gain access to the relevant channels." +
-                                     "\n\nReact With:\n<:Lacia:944271608711872583> for <@&944256384235606027>" +
-                                     "\n<:Vivy:944271916426985532> for <@&944257914162516019>" +
-                                     "\n<:Miku:944272417180774420> for <@&944277387032543343>" +
-                                     "\n<:Eve:944297441723830314> for <@&944297684133642352>")
-            await message.add_reaction(emoji="<:Lacia:944271608711872583>")
-            await message.add_reaction(emoji="<:Vivy:944271916426985532>")
-            await message.add_reaction(emoji="<:Miku:944272417180774420>")
-            await message.add_reaction(emoji="<:Eve:944297441723830314>")
-        else:
-            await ctx.send("Apologies, you do not have permission to use this command.")
+        """
+        Send a message to assign roles with reactions.
+        """
+        await ctx.channel.purge(limit=1)
+        message = await ctx.send("Server Roles! Select one to gain access to the relevant channels." +
+                                 "\n\nReact With:\n<:Lacia:944271608711872583> for <@&944256384235606027>" +
+                                 "\n<:Vivy:944271916426985532> for <@&944257914162516019>" +
+                                 "\n<:Miku:944272417180774420> for <@&944277387032543343>" +
+                                 "\n<:Eve:944297441723830314> for <@&944297684133642352>")
+        await message.add_reaction(emoji="<:Lacia:944271608711872583>")
+        await message.add_reaction(emoji="<:Vivy:944271916426985532>")
+        await message.add_reaction(emoji="<:Miku:944272417180774420>")
+        await message.add_reaction(emoji="<:Eve:944297441723830314>")
 
 
 def setup(client):

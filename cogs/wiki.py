@@ -3,6 +3,9 @@ from nextcord.ext import commands
 import wikipedia
 
 class Wikipedia(commands.Cog):
+    """
+    A bot isn't complete without a wikipedia search command.
+    """
     @staticmethod
     def purge_displaystyle(text, first_open_brace):
         depth = 1
@@ -18,8 +21,11 @@ class Wikipedia(commands.Cog):
     def __init__(self, client): 
         self.client = client
 
-    @commands.command()
+    @commands.command(usage="<keywords>", aliases=[])
     async def wiki(self, ctx, *, keywords):
+        """
+        Search wikipedia.
+        """
         try:
             # Use repr to convert command object to string
             response = wikipedia.summary(repr(keywords), sentences=2)
