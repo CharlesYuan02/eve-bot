@@ -79,15 +79,13 @@ class Skynet(commands.Cog):
             await ctx.send("Admin lock is currently active. No nuclear strikes can be sent at this time.")
 
     @commands.command(usage="", aliases=[])
+    @commands.is_owner()
     async def lock(self, ctx):
         """
         Lock Skynet to prevent abuse.
         """
-        if str(ctx.author) == "Chubbyman#3362":
-            self.nuke = False
-            await ctx.send("Nuclear strikes are now locked. Password must now be re-entered.")
-        else:
-            await ctx.send("Apologies, only my master can lock the nukes.")
+        self.nuke = False
+        await ctx.send("Nuclear strikes are now locked. Password must now be re-entered.")
 
     @commands.command(usage="<passcode>", aliases=[])
     async def admin_lock(self, ctx, *, passcode):
@@ -144,7 +142,7 @@ class Skynet(commands.Cog):
                 await ctx.send("Please input a designated target - 'eve skynet [city]'.")
 
             targets = targets.lower()
-            if not self.nuke and str(ctx.author) != "Chubbyman#3362":
+            if not self.nuke and not await self.bot.is_owner(ctx.author):
                 await ctx.send("Please input correct password using 'eve passcode [passcode]' command.")
                 return
 
@@ -217,7 +215,7 @@ class Skynet(commands.Cog):
             await ctx.send("Nuclear strike is already in launch. Please standby.")
 
         else:
-            if not self.nuke and str(ctx.author) != "Chubbyman#3362":
+            if not self.nuke and not await self.bot.is_owner(ctx.author):
                 await ctx.send("Please input correct password using 'eve passcode [passcode]' command.")
                 return
 
@@ -274,7 +272,7 @@ class Skynet(commands.Cog):
 
         else:
             targets = targets.lower()
-            if not self.nuke and str(ctx.author) != "Chubbyman#3362":
+            if not self.nuke and not await self.bot.is_owner(ctx.author):
                 await ctx.send("Please input correct password using 'eve passcode [passcode]' command.")
                 return
 

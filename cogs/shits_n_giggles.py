@@ -25,7 +25,7 @@ class Gifs(commands.Cog):
         print(repr(member))
 
     @commands.command(usage="<member>", aliases=["murder", "stab", "mutilate", "crucify", "decapitate"])
-    async def kill(self, ctx, *, member):
+    async def kill(self, ctx, *, member:nextcord.Member):
         """
         Kill your enemies.
         """
@@ -34,21 +34,21 @@ class Gifs(commands.Cog):
                         "https://38.media.tumblr.com/tumblr_lwp9gvzM4n1qd4f2uo1_500.gif",
                         "https://i.gifer.com/8Lnq.gif",
                         "https://i.pinimg.com/originals/2b/40/18/2b40185d04e8e6b774f7612623a5ae30.gif"]
-        if repr(member) == "'<@!336329924891639818>'":
+        if await self.bot.is_owner(member):
             await ctx.send("No.")
         else:
-            await ctx.send(f"{member}, prepare to die!")
+            await ctx.send(f"{member.mention}, prepare to die!")
             await ctx.send(f"{random.choice(kill_library)}")
 
     @commands.command(usage="<member>", aliases=["bully"])
-    async def shit_on(self, ctx, *, member):
+    async def shit_on(self, ctx, *, member:nextcord.Member):
         """
         Screw that guy.
         """
-        if str(member) == "<@!336329924891639818>":  # This is me
+        if await self.bot.is_owner(member):
             await ctx.send("No.")
         else:
-            await ctx.send(f"Fuck you {member}.")
+            await ctx.send(f"Fuck you {member.mention}.")
 
 
 def setup(client):
