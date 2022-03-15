@@ -63,6 +63,9 @@ Eve has now been migrated to nextcord and is now the official bot of the EngSci 
 ### Update (Mar 11, 2022):
 Eve now has embeds! They're integrated into the help, define, and wiki commands.
 
+### Update (Mar 14, 2022):
+Eve received her first PR! Thanks to Jonah Chen for fixing the weird Latex formatting issue with the wiki command. 
+
 <p float="left">
 <img src="https://github.com/Chubbyman2/eve-bot/blob/main/docs/eve_embed_sample_2.PNG" width="412">
 <img src="https://github.com/Chubbyman2/eve-bot/blob/main/docs/eve_embed_sample.png" width="412">
