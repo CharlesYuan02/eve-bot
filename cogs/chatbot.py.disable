@@ -8,7 +8,7 @@ class Chatbot(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-        """
+
         self.model_name = "microsoft/DialoGPT-medium"
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
         self.model = AutoModelForCausalLM.from_pretrained(self.model_name)
@@ -97,6 +97,6 @@ class Chatbot(commands.Cog):
         output = self.tokenizer.decode(chat_history_ids[:, input_ids.shape[-1]:][0], skip_special_tokens=True)
         await ctx.send(output)
 
-"""
+
 def setup(client):
     client.add_cog(Chatbot(client))
