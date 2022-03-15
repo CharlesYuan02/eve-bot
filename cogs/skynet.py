@@ -3,6 +3,8 @@ from nextcord.ext import commands
 import time
 import random
 
+from cogs.utils import checks
+
 
 class Skynet(commands.Cog):
     """
@@ -91,6 +93,7 @@ class Skynet(commands.Cog):
         await ctx.send("Nuclear strikes are now locked. Password must now be re-entered.")
 
     @commands.command(usage="<passcode>", aliases=[])
+    @checks.is_admin()
     async def admin_lock(self, ctx, *, passcode):
         """
         Lock Skynet on a server.
