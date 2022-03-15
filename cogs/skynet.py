@@ -104,12 +104,12 @@ class Skynet(commands.Cog):
             await ctx.send("Please input correct admin passcode with command.")
             return
 
-        if "lucia" in passcode and "sukrova" in passcode and str(ctx.author) == "Chubbyman#3362" and not self.locked:
+        if "lucia" in passcode and "sukrova" in passcode and not self.locked:
             self.nuke = False
             self.locked = True
             await ctx.send("Skynet function is now locked.")
 
-        elif "lucia" in passcode and "sukrova" in passcode and str(ctx.author) == "Chubbyman#3362" and self.locked:
+        elif "lucia" in passcode and "sukrova" in passcode and self.locked:
             self.locked = False
             await ctx.send("Skynet function has been unlocked. You may now send nuclear strikes.")
 
