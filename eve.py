@@ -24,7 +24,7 @@ class Eve():
             print("Eve, online and ready!")
 
 
-        @self.client.command(usage="[command]", aliases=["commands", "q"])
+        @self.client.command(usage="[command]", aliases=["commands"])
         async def help(ctx, command:str=None, subcommand:str=None):
             """
             Shows this help message.
@@ -66,14 +66,14 @@ class Eve():
             cmd = self.client.get_command(command) # Command help
             
             if cmd is None:
-                await ctx.send("That's not a valid command!")
+                await ctx.send("Apologies, that is not a valid command.")
                 return
 
             if isinstance(cmd, commands.Group) and subcommand is None:
                 try:
                     await cmd.can_run(ctx)
                 except commands.CheckFailure:
-                    await ctx.send("That's not a valid command!")
+                    await ctx.send("Apologies, that is not a valid command.")
                     return
 
                 embed = nextcord.Embed(title=cmd.name + " info",
@@ -89,12 +89,12 @@ class Eve():
                 if subcommand is not None:
                     cmd = self.client.get_command(command+" "+subcommand)
                     if cmd is None:
-                        await ctx.send("That's not a valid command!")
+                        await ctx.send("Apologies, that is not a valid command.")
 
                 try:
                     await cmd.can_run(ctx)
                 except commands.CheckFailure:
-                    await ctx.send("That's not a valid command!")
+                    await ctx.send("Apologies, that is not a valid command.")
                     return
 
 
