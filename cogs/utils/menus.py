@@ -21,7 +21,7 @@ class HelpMenu(nextcord.ui.Select):
                         value=cog.description if hasattr(cog, "description") else "General miscellaneous commands",
                         inline=False)
 
-        for command in self.mapping[cog]:
+        for command in sorted(self.mapping[cog]):
             embed.add_field(name=command.name, value=command.help.split("\n")[0])
 
         for option in self.options:
