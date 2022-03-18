@@ -288,7 +288,7 @@ class Skynet(commands.Cog):
                 nuke_list = []
                 population_list = []
                 for i in range(len(self.cities)):
-                    if cities[i][0].lower() in city_list:
+                    if self.cities[i][0].lower() in city_list:
                         nuke_list.append(self.cities[i][0])
                         population_list.append(self.cities[i][1])
 
