@@ -1,5 +1,3 @@
-# import pdb
-
 import asyncio
 import datetime
 import nextcord
@@ -41,10 +39,8 @@ class Eve():
                 for cog, cmds in copy.items():
                     for c in cmds:
                         try:
-                            # pdb.set_trace()
                             await c.can_run(ctx)
-                        except Exception as e:# commands.CheckFailure:
-                            print(c.name, "cannot be executed because of a", e)
+                        except commands.CheckFailure:
                             mapping[cog].remove(c)
                     if not mapping[cog]:
                         mapping.pop(cog)
@@ -137,7 +133,7 @@ class Eve():
 
         @self.client.command(usage="<extension>", aliases=[])
         @commands.is_owner()
-        async def unload(ctx, extension):  
+        async def unload(ctx, extension):
             """
             Unload an extension for the bot.
             """
@@ -333,7 +329,7 @@ class Eve():
 
         @self.client.command(usage="", aliases=["praxis_lock", "unlock_praxis", "praxis_unlock"])
         @commands.is_owner()
-        async def lock_praxis(ctx):  
+        async def lock_praxis(ctx):
             """
             Toggles the functionality of the fuck_praxis command.
             """
