@@ -33,7 +33,7 @@ class Eve():
             if command is None: # General help
                 mapping = {cog: cog.get_commands() for cog in self.client.cogs.values()}
                 mapping['General'] = [c for c in self.client.walk_commands() if c.cog is None]
-                copy = mapping.copy()
+                copy = {cog: commands[:] for cog, commands in mapping.items()}
 
                 # Only show commands that the invoker can use
                 for cog, cmds in copy.items():
@@ -76,13 +76,20 @@ class Eve():
                     await ctx.send("Apologies, that is not a valid command.")
                     return
 
+                subcmds = cmd.commands
+                for subcommand in cmd.commands:
+                    try:
+                        await cmd.can_run(ctx)
+                    except commands.CheckFailure:
+                        subcmds.remove(subcommand)
+                    
                 embed = nextcord.Embed(title=cmd.name + " info",
                                        description=cmd.help)
                 
                 embed.add_field(name="Aliases",
                                 value=', '.join([self.client.command_prefix[0] + alias for alias in [cmd.name] + sorted(cmd.aliases)]))
                 embed.add_field(name="Usage", value=self.client.command_prefix[0] + cmd.name + " " + cmd.usage)
-                embed.add_field(name="Subcommands", value=', '.join(sorted([command.name for command in cmd.commands])))
+                embed.add_field(name="Subcommands", value=', '.join(sorted([command.name for command in subcmds])))
 
                 await ctx.send(embed=embed)
             else:
@@ -145,14 +152,14 @@ class Eve():
 
 
         @self.client.command(usage="<member> [reason]", aliases=[])
-        @checks.is_admin()
+        @commands.has_permissions(kick_members=True)
         async def kick(ctx, member: nextcord.Member, *, reason=None):
             """
             Kick a server member.
             """
 
         @self.client.command(usage="<member> [reason]", aliases=[])
-        @checks.is_admin()
+        @commands.has_permissions(ban_members=True)
         async def ban(ctx, member: nextcord.Member, *, reason=None):
             """
             Ban a server member.
@@ -162,7 +169,7 @@ class Eve():
         
 
         @self.client.command(usage="<user>", aliases=[])
-        @checks.is_admin()
+        @commands.has_permissions(ban_members=True)
         # Can't do nextcord.Member, because it can't convert a string to a member object
         async def unban(ctx, *, member):
             """
@@ -252,7 +259,7 @@ class Eve():
 
 
         @self.client.command(usage="[number of messages]", aliases=["delete", "del", "remove"])
-        @checks.is_admin()
+        @commands.has_permissions(manage_messages=True)
         async def clear(ctx, amount=10):  # Clears a specified number of lines
             """
             Delete a specified number of messages.
