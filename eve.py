@@ -7,7 +7,7 @@ import pytz
 import random
 import time
 
-from cogs.utils import menus, checks
+from cogs.utils import menus
 
 class Eve():
     def __init__(self):
