@@ -250,6 +250,7 @@ class Eve():
             Send a server member an anonymous private message.
             """
             if member is not None:
+                await ctx.channel.purge(limit=1)
                 channel = member.dm_channel
                 if channel is None:
                     channel = await member.create_dm()
