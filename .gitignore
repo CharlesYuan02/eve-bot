@@ -1,3 +1,4 @@
 /.env
 /.pmp
 */__pycache__/
+*.pyc

@@ -1,5 +1,7 @@
 import asyncio
 import datetime
+from urllib.request import urlopen
+import ssl
 import nextcord
 from nextcord.ext import commands
 import os
@@ -9,12 +11,11 @@ import time
 
 from cogs.utils import menus
 
-class Eve():
+class Eve:
     def __init__(self):
         self.client = commands.Bot(command_prefix=["eve ", "Eve "], case_insensitive=True, help_command=None)
-        self.praxis_lock = True
-        self.praxis = False
-        self.praxis_time = None
+        self.praxis_lock = set() # you can only lock praxis in your own server
+        self.praxis = dict()
 
 
     def main(self):
@@ -307,43 +308,42 @@ class Eve():
             Fuck Praxis
             Toggles sending a message once an hour to remind everyone that Praxis sucks.
             """
-            EST = pytz.timezone("US/Eastern")
-
-            if not self.praxis_lock:
-                if not self.praxis:
-                    self.praxis = True
-                    self.praxis_time = datetime.datetime.now(EST).strftime("%H:%M:%S")
-                    await ctx.send(f"Praxis bullying has commenced at {self.praxis_time} EST.")
-                elif self.praxis:
-                    self.praxis = False
-                    self.praxis_time = datetime.datetime.now(EST).strftime("%H:%M:%S")
-                    await ctx.send(f"Praxis bullying has been stopped at {self.praxis_time} EST.")
-
-                while self.praxis:
-                    await ctx.send("Fuck Praxis.")
-                    # Asyncio is useful because it allows other tasks to be run while .sleep() is active
-                    await asyncio.sleep(3600)
-            else:
+            id = ctx.author.guild.id
+            
+            if id in self.praxis_lock:
                 await ctx.send("Apologies, Praxis bullying is locked.")
                 return
 
+            EST = pytz.timezone("US/Eastern")
+            if id in self.praxis:
+                self.praxis[id] = not self.praxis[id]
+            else:
+                self.praxis[id] = True
 
+            praxis_time = datetime.datetime.now(EST).strftime("%H:%M:%S")
+            await ctx.send(f"Praxis bullying has {'commenced' if self.praxis[id] else 'been stopped'} at {praxis_time} EST.")
+
+            while self.praxis[id]:
+                await ctx.send("Fuck Praxis.")
+                # Asyncio is useful because it allows other tasks to be run while .sleep() is active
+                await asyncio.sleep(3600)
+
+        
         @self.client.command(usage="", aliases=["praxis_lock", "unlock_praxis", "praxis_unlock"])
         @commands.is_owner()
         async def lock_praxis(ctx):
             """
             Toggles the functionality of the fuck_praxis command.
             """
-            if self.praxis_lock:
-                self.praxis_lock = False
+            id = ctx.author.guild.id
+            if id in self.praxis_lock:
+                self.praxis_lock.remove(id)
                 await ctx.send("Praxis bullying is now unlocked.")
-                return
-            elif not self.praxis_lock:
-                self.praxis_lock = True
+            else:
+                self.praxis_lock.add(id)
                 await ctx.send("Praxis bullying is now locked.")
-                return
 
-        
+
         for filename in os.listdir("cogs"):
             if filename.endswith(".py"):
                 # Cuts cog_example.py to cog_example
