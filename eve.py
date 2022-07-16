@@ -276,10 +276,7 @@ class Eve:
             """
             Give a server member flowers.
             """
-            if str(ctx.author) == "Chubbyman#9029":
-                await ctx.send(f"{member}, here is a :rose:, courtesy of your beloved Claire Clayton.")
-            else:
-                await ctx.send(f"{member}, here is a :rose:, courtesy of your beloved {ctx.author}.")
+            await ctx.send(f"{member}, here is a :rose:, courtesy of your beloved {ctx.author}.")
 
 
         # Unleashes Hyperactive skill
