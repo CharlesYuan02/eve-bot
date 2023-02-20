@@ -145,7 +145,7 @@ class Skynet(commands.Cog):
                 await ctx.send("Please input a designated target - 'eve skynet [city]'.")
 
             targets = targets.lower()
-            if not self.nuke and not await self.bot.is_owner(ctx.author):
+            if not self.nuke and not await self.client.is_owner(ctx.author):
                 await ctx.send("Please input correct password using 'eve passcode [passcode]' command.")
                 return
 
@@ -218,7 +218,7 @@ class Skynet(commands.Cog):
             await ctx.send("Nuclear strike is already in launch. Please standby.")
 
         else:
-            if not self.nuke and not await self.bot.is_owner(ctx.author):
+            if not self.nuke and not await self.client.is_owner(ctx.author):
                 await ctx.send("Please input correct password using 'eve passcode [passcode]' command.")
                 return
 

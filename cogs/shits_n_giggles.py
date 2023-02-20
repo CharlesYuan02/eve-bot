@@ -37,7 +37,7 @@ class Gifs(commands.Cog):
                         "https://38.media.tumblr.com/tumblr_lwp9gvzM4n1qd4f2uo1_500.gif",
                         "https://i.gifer.com/8Lnq.gif",
                         "https://i.pinimg.com/originals/2b/40/18/2b40185d04e8e6b774f7612623a5ae30.gif"]
-        if await self.bot.is_owner(member):
+        if await self.client.is_owner(member):
             await ctx.send("No.")
         else:
             await ctx.send(f"{member.mention}, prepare to die!")
@@ -48,7 +48,8 @@ class Gifs(commands.Cog):
         """
         Screw that guy.
         """
-        if await self.bot.is_owner(member):
+        # Do not run if target is owner
+        if await self.client.is_owner(member):
             await ctx.send("No.")
         else:
             await ctx.send(f"Fuck you {member.mention}.")
