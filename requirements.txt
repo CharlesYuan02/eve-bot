@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+=======
+-f https://download.pytorch.org/whl/torch_stable.html
+torch==1.13.1+cpu
+torchvision==0.11.3+cpu
+torchaudio===0.10.2+cpu
+transformers==4.16.2
+>>>>>>> 4a07454a6084eeeb169d9ea5dda7c67af8a506e8
 asyncio==3.4.3
 nextcord==2.0.0a8
 datetime==4.3
