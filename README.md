@@ -25,11 +25,6 @@ python eve.py
 
 ### Prerequisites
 ```
--f https://download.pytorch.org/whl/torch_stable.html
-torch==1.10.2+cpu
-torchvision==0.11.3+cpu
-torchaudio===0.10.2+cpu
-transformers==4.16.2
 asyncio==3.4.3
 nextcord==2.0.0a8
 datetime==4.3
